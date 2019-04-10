@@ -20,7 +20,14 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 export class ModalPromosPage {
   cliente
-
+  promo91 =[]
+  promo92 =[]
+  promo93 =[]
+  promo94 =[]
+  promo95 =[]
+  promo96 =[]
+  promo97 =[]
+  promo98 =[]
   productos: any;
   productosSQL: any=[];
 
@@ -440,6 +447,74 @@ promo3 = 0;
       }
       }
       return this.promoSQL
+    }).then(res =>{
+
+      for(var i = 0; i<this.promoSQL.length;i++){
+        if(this.promoSQL[i].PM_CLAVE_PROMO === 9991){
+
+          this.promo91.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+        }
+
+        if(this.promoSQL[i].PM_CLAVE_PROMO === 9992){
+
+          this.promo92.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+        }
+
+        if(this.promoSQL[i].PM_CLAVE_PROMO === 9993){
+
+          this.promo93.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+        }
+
+        if(this.promoSQL[i].PM_CLAVE_PROMO === 9994){
+
+          this.promo94.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+        }
+
+        if(this.promoSQL[i].PM_CLAVE_PROMO === 9995){
+
+          this.promo95.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+        }
+
+        if(this.promoSQL[i].PM_CLAVE_PROMO === 9996){
+
+          this.promo96.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+        }
+
+        if(this.promoSQL[i].PM_CLAVE_PROMO === 9997){
+
+          this.promo97.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+        }
+
+        if(this.promoSQL[i].PM_CLAVE_PROMO === 9998){
+
+          this.promo98.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+        }
+
+      }
+      console.log(this.promo91)
+      console.log(this.promo92)
+      console.log(this.promo93)
+      console.log(this.promo94)
+      console.log(this.promo95)
+      console.log(this.promo96)
+      console.log(this.promo97)
+      console.log(this.promo98)
     })
     .catch(e => console.log(e));
 });
