@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ɵConsole } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, AlertController, ToastController } from 'ionic-angular';
 import { ProductoProvider } from '../../providers/producto/producto';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
@@ -91,10 +91,25 @@ promo3 = 0;
   }
 
   showPrompt(producto){   //ventana emergente para agregar cantidad de piezas
-    if(producto.PD_NOMBRE.toString() == "PROMOCION PAQUETES"){
-     // this.getPromos(producto.PD_CLAVE);
-      
+    if(producto === 'promo91'){
+      producto = this.promo1;
+    }else if(producto === 'promo2'){
+      producto = this.promo92;
+    }else if(producto === 'promo3'){
+      producto = this.promo93;
+    }else if(producto === 'promo4'){
+      producto = this.promo94;
+    }else if(producto === 'promo5'){
+      producto = this.promo95;
+    }else if(producto === 'promo6'){
+      producto = this.promo96;
+    }else if(producto === 'promo7'){
+      producto = this.promo97;
+    }else if(producto === 'promo8'){
+      producto = this.promo98;
     }
+
+    console.log(producto)
     
     const prompt = this.alertCtrl.create({
          
@@ -121,25 +136,29 @@ promo3 = 0;
         handler: data=>{
      
           if(Number(data.cantidad)){
-           if(data.cantidad > producto.EXISTENCIA){
-            this.inventarioIn();
-            this.closeModal();
-           }else{
-
-              this.objeto = {    //si usamos [{ ...}], [{ ... }]  crea un arreglo de arreglos
-              clave: producto.PD_CLAVE,
-              nombre: producto.PD_NOMBRE,
-              precio:producto.PRECIO_FINAL,
-              cantidad: data.cantidad,
-              iva:producto.IVA_FINAL*producto.PRECIO_FINAL * data.cantidad,
-              ieps:producto.IEPS_FINAL*producto.PRECIO_FINAL * data.cantidad,
-              importe: (data.cantidad*producto.PRECIO_FINAL) + (producto.IEPS_FINAL*producto.PRECIO_FINAL*data.cantidad) + producto.IVA_FINAL*producto.PRECIO_FINAL*data.cantidad,
-              equivalencia:producto.UM_CANTIDAD * data.cantidad
+            for(var i = 0; i<producto.length; i++){
+              if(data.cantidad > producto[i].EXISTENCIA){
+                this.inventarioIn();
+                this.closeModal();
+               }else{
+    
+                  this.objeto = {    //si usamos [{ ...}], [{ ... }]  crea un arreglo de arreglos
+                  promo:producto[i].PM_CLAVE_PROMO,
+                  clave: producto[i].PM_CLAVE_PRODUCTO,
+                  nombre: producto[i].PD_NOMBRE,
+                  precio:producto[i].PM_PRECIOXUNIDAD_PROMO,
+                  cantidad: data.cantidad * producto[i].PM_CANTIDAD,
+                  iva:producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
+                  ieps:producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
+                  importe: (data.cantidad * producto[i].PM_CANTIDAD * producto[i].PM_PRECIOXUNIDAD_PROMO) + (producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD) + producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD,
+                  equivalencia:producto[i].UM_CANTIDAD * data.cantidad * producto[i].PM_CANTIDAD
+                }
+              
+                console.log(this.objeto)
+                }
+    
             }
-          
-
-            }
-
+           
 	  // }
 
            this.carrito.push(this.objeto);  //agrega la seleccion especifica de producto. 
@@ -283,9 +302,15 @@ promo3 = 0;
           console.log(this.productosSQL[e].PD_CLAVE)
           if(this.productosSQL[e].PD_CLAVE === res.rows.item(i).PM_CLAVE_PRODUCTO) {
             console.log("one goes in", this.productosSQL[e].PD_CLAVE)
-            this.promoSQL.push({PM_CLAVE_PRODUCTO:res.rows.item(i).PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:res.rows.item(i).PM_CLAVE_PROMO,
-              PM_CANTIDAD:res.rows.item(i).PM_CANTIDAD,PM_PRECIOXUNIDAD_PROMO:res.rows.item(i).PM_PRECIOXUNIDAD_PROMO,
-              EXISTENCIA:this.productosSQL[e].EXISTENCIA})
+            this.promoSQL.push({PM_CLAVE_PRODUCTO:res.rows.item(i).PM_CLAVE_PRODUCTO,
+               PM_CLAVE_PROMO:res.rows.item(i).PM_CLAVE_PROMO,
+              PM_CANTIDAD:res.rows.item(i).PM_CANTIDAD,
+              PM_PRECIOXUNIDAD_PROMO:res.rows.item(i).PM_PRECIOXUNIDAD_PROMO,
+              EXISTENCIA:this.productosSQL[e].EXISTENCIA,
+              UM_CANTIDAD:this.productosSQL[e].UM_CANTIDAD,
+              IVA_FINAL:this.productosSQL[e].IVA_FINAL,
+              IEPS_FINAL:this.productosSQL[e].IEPS_FINAL,
+              PD_NOMBRE:this.productosSQL[e].PD_NOMBRE})
           }
         
         }
@@ -295,11 +320,7 @@ promo3 = 0;
       return this.sqlpromo
      
     }).then(res =>{
-      
 
-      
-
-     // for(var h = 0; h<this.sqlpromo.length; h++){
 
         for(var f = 0; f<this.sqlpromo.length; f++){
           if(this.sqlpromo[f].PM_CLAVE_PROMO === 9991){
@@ -452,58 +473,106 @@ promo3 = 0;
       for(var i = 0; i<this.promoSQL.length;i++){
         if(this.promoSQL[i].PM_CLAVE_PROMO === 9991){
 
-          this.promo91.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
-            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
-            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+          this.promo91.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO,
+            PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+           PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD,
+           PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+           EXISTENCIA:this.promoSQL[i].EXISTENCIA,
+           UM_CANTIDAD:this.promoSQL[i].UM_CANTIDAD,
+           IVA_FINAL:this.promoSQL[i].IVA_FINAL,
+           IEPS_FINAL:this.promoSQL[i].IEPS_FINAL,
+           PD_NOMBRE:this.promoSQL[i].PD_NOMBRE})
         }
 
         if(this.promoSQL[i].PM_CLAVE_PROMO === 9992){
 
-          this.promo92.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
-            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
-            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+          this.promo92.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO,
+            PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+           PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD,
+           PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+           EXISTENCIA:this.promoSQL[i].EXISTENCIA,
+           UM_CANTIDAD:this.promoSQL[i].UM_CANTIDAD,
+           IVA_FINAL:this.promoSQL[i].IVA_FINAL,
+           IEPS_FINAL:this.promoSQL[i].IEPS_FINAL,
+           PD_NOMBRE:this.promoSQL[i].PD_NOMBRE})
         }
 
         if(this.promoSQL[i].PM_CLAVE_PROMO === 9993){
 
-          this.promo93.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
-            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
-            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+          this.promo93.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO,
+            PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+           PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD,
+           PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+           EXISTENCIA:this.promoSQL[i].EXISTENCIA,
+           UM_CANTIDAD:this.promoSQL[i].UM_CANTIDAD,
+           IVA_FINAL:this.promoSQL[i].IVA_FINAL,
+           IEPS_FINAL:this.promoSQL[i].IEPS_FINAL,
+           PD_NOMBRE:this.promoSQL[i].PD_NOMBRE})
         }
 
         if(this.promoSQL[i].PM_CLAVE_PROMO === 9994){
 
-          this.promo94.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
-            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
-            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+          this.promo94.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO,
+            PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+           PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD,
+           PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+           EXISTENCIA:this.promoSQL[i].EXISTENCIA,
+           UM_CANTIDAD:this.promoSQL[i].UM_CANTIDAD,
+           IVA_FINAL:this.promoSQL[i].IVA_FINAL,
+           IEPS_FINAL:this.promoSQL[i].IEPS_FINAL,
+           PD_NOMBRE:this.promoSQL[i].PD_NOMBRE})
         }
 
         if(this.promoSQL[i].PM_CLAVE_PROMO === 9995){
 
-          this.promo95.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
-            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
-            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+          this.promo95.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO,
+            PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+           PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD,
+           PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+           EXISTENCIA:this.promoSQL[i].EXISTENCIA,
+           UM_CANTIDAD:this.promoSQL[i].UM_CANTIDAD,
+           IVA_FINAL:this.promoSQL[i].IVA_FINAL,
+           IEPS_FINAL:this.promoSQL[i].IEPS_FINAL,
+           PD_NOMBRE:this.promoSQL[i].PD_NOMBRE})
         }
 
         if(this.promoSQL[i].PM_CLAVE_PROMO === 9996){
 
-          this.promo96.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
-            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
-            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+          this.promo96.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO,
+            PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+           PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD,
+           PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+           EXISTENCIA:this.promoSQL[i].EXISTENCIA,
+           UM_CANTIDAD:this.promoSQL[i].UM_CANTIDAD,
+           IVA_FINAL:this.promoSQL[i].IVA_FINAL,
+           IEPS_FINAL:this.promoSQL[i].IEPS_FINAL,
+           PD_NOMBRE:this.promoSQL[i].PD_NOMBRE})
         }
 
         if(this.promoSQL[i].PM_CLAVE_PROMO === 9997){
 
-          this.promo97.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
-            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
-            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+          this.promo97.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO,
+            PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+           PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD,
+           PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+           EXISTENCIA:this.promoSQL[i].EXISTENCIA,
+           UM_CANTIDAD:this.promoSQL[i].UM_CANTIDAD,
+           IVA_FINAL:this.promoSQL[i].IVA_FINAL,
+           IEPS_FINAL:this.promoSQL[i].IEPS_FINAL,
+           PD_NOMBRE:this.promoSQL[i].PD_NOMBRE})
         }
 
         if(this.promoSQL[i].PM_CLAVE_PROMO === 9998){
 
-          this.promo98.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO, PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
-            PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD, PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
-            EXISTENCIA:this.promoSQL[i].EXISTENCIA})
+          this.promo98.push({PM_CLAVE_PRODUCTO:this.promoSQL[i].PM_CLAVE_PRODUCTO,
+            PM_CLAVE_PROMO:this.promoSQL[i].PM_CLAVE_PROMO,
+           PM_CANTIDAD:this.promoSQL[i].PM_CANTIDAD,
+           PM_PRECIOXUNIDAD_PROMO:this.promoSQL[i].PM_PRECIOXUNIDAD_PROMO,
+           EXISTENCIA:this.promoSQL[i].EXISTENCIA,
+           UM_CANTIDAD:this.promoSQL[i].UM_CANTIDAD,
+           IVA_FINAL:this.promoSQL[i].IVA_FINAL,
+           IEPS_FINAL:this.promoSQL[i].IEPS_FINAL,
+           PD_NOMBRE:this.promoSQL[i].PD_NOMBRE})
         }
 
       }
@@ -572,39 +641,6 @@ promo3 = 0;
       
   });
   this.getPromos();
-}
-
-
-
-
-/*
- async dobyPromos(clave){
-   this.promoClave = clave;
-   console.log ("clave de promo:");
-   console.log (this.promoClave);
-  var promos = await this.getPromos(this.promoClave)
-   this.guardardobyPromo(promos);
-   console.log ("si hacer querry");
-           // this.promoSQL;
-    console.log (this.promoSQL);
-}
-*/
-guardardobyPromo(promodobs){
-  for(var i; promodobs.length; i++){
-    this.objeto = {    //si usamos [{ ...}], [{ ... }]  crea un arreglo de arreglos
-             clave: promodobs.PM_CLAVE_PRODUCTO,
-             //nombre: this.promoSQL.,
-             precio: promodobs.PM_PRECIOXUNIDAD_PROMO,
-             cantidad: promodobs.PM_CANTIDAD,
-            //iva:producto.IVA_FINAL*producto.PRECIO_FINAL, 
-            iva:0,
-            // ieps:producto.IEPS_FINAL*producto.PRECIO_FINAL,
-            ieps: 0,
-             importe: 0
-           }
-  }
-  return this.objeto;
-  
 }
 
 
