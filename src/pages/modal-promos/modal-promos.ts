@@ -136,13 +136,14 @@ promo3 = 0;
         handler: data=>{
      
           if(Number(data.cantidad)){
+            this.objeto 
             for(var i = 0; i<producto.length; i++){
               if(data.cantidad > producto[i].EXISTENCIA){
                 this.inventarioIn();
                 this.closeModal();
                }else{
     
-                  this.objeto = {    //si usamos [{ ...}], [{ ... }]  crea un arreglo de arreglos
+                 this.carrito.push(this.objeto ={    //si usamos [{ ...}], [{ ... }]  crea un arreglo de arreglos
                   promo:producto[i].PM_CLAVE_PROMO,
                   clave: producto[i].PM_CLAVE_PRODUCTO,
                   nombre: producto[i].PD_NOMBRE,
@@ -152,7 +153,7 @@ promo3 = 0;
                   ieps:producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
                   importe: (data.cantidad * producto[i].PM_CANTIDAD * producto[i].PM_PRECIOXUNIDAD_PROMO) + (producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD) + producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD,
                   equivalencia:producto[i].UM_CANTIDAD * data.cantidad * producto[i].PM_CANTIDAD
-                }
+                })
               
                 console.log(this.objeto)
                 }
@@ -161,7 +162,7 @@ promo3 = 0;
            
 	  // }
 
-           this.carrito.push(this.objeto);  //agrega la seleccion especifica de producto. 
+           //this.carrito.push(this.objeto);  //agrega la seleccion especifica de producto. 
            console.log (this.carrito);
            this.closeModal();
           }else{

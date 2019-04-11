@@ -485,7 +485,7 @@ openModalPromos(){ //manda abrir el fragmento de productos
   myModal.present();  //abre el modal
 
   myModal.onDidDismiss(producto =>{
-
+    console.log(producto, "producto")
  
     if(this.productos.length === 0){   //si es el primer producto que se agrega a la venta entra a esta opcion (el arreglo estaba vacio)
        
@@ -495,9 +495,13 @@ openModalPromos(){ //manda abrir el fragmento de productos
 
             //calcula los valores finales de la venta
             this.subtotalVta= producto[i].importe - (producto[i].iva + producto[i].ieps)
+            console.log(producto[i].importe - (producto[i].iva + producto[i].ieps), "subtotal")
             this.IVAVta= producto[i].iva;
+            console.log(producto[i].iva, "iva")
             this.IEPSVta = producto[i].ieps;
+            console.log(producto[i].ieps, "ieps")
             this.totalSumaVta=  producto[i].importe;
+            console.log(producto[i].importe,"total")
            
             //calculo para kilolitros
            this.KLAcumVta=producto[i].equivalencia;
