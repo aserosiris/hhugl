@@ -22,6 +22,7 @@ export class CarritoVtPage {
   precios = [];
   NotaVta: Array<any> = []; 
   preventa: any;
+  promo
 
   tipRuta
  
@@ -85,7 +86,7 @@ export class CarritoVtPage {
         console.log(this.vendedor, 'constructor')
       })
         
-       this.productos;
+       this.productos = []
        this.nav=navCtrl;
        this.cliente = navParams.get('cliente');
  
@@ -148,6 +149,61 @@ export class CarritoVtPage {
 
   //FUNCION PARA BORRAR PRODUCTO
   deleteClave(cve){
+    console.log(cve, "borrar")
+    if(cve.promo){
+      console.log("entra en if", cve.promo)
+      for(var i = 0; i<this.productos.length; i++){
+        console.log(this.productos.length)
+        console.log(this.productos[i].promo, cve.promo,"compara")
+        if(this.productos[i].promo === cve.promo){
+
+          let index = this.productos.indexOf(cve);
+
+    if(index > -1){
+        this.productos.splice(index, 1);
+    }
+
+
+      //inicializar en cero antes de recalcular
+        this.subtotalVta=0;
+        this.IVAVta=0;
+        this.IEPSVta=0;
+        this.totalSumaVta=0;
+        this.KLAcumVta=0;
+
+      for(var i = 0, len = this.productos.length; i < len; i++){
+        
+        //recalcula los valores finales de la venta despues de borrar un elemento. 
+        this.subtotalVta= this.subtotalVta +(this.productos[i].importe - (this.productos[i].iva + this.productos[i].ieps))
+        this.IVAVta= this.IVAVta + this.productos[i].iva;
+        this.IEPSVta = this.IEPSVta + this.productos[i].ieps;
+        this.totalSumaVta= this.totalSumaVta + (this.productos[i].importe );
+
+             //Recalculo para kilolitros
+             this.KLAcumVta=this.KLAcumVta+this.productos[i].equivalencia;
+        }
+        this.totalFinal= this.totalSumaVta-this.reconocimientoCte;
+        
+        if(this.totalFinal<0) //si el valor es negativo: hay sobrante de reconocimiento
+        { 
+            this.reconocimientoSobrante=this.totalFinal* (-1);  //multiplica el valor por -1 para guardar el valor del sobrante
+            this.totalFinal=0.00;  //el  total  a pagar sera 0 mientras haya sobrante 
+            this.reconocimientoVta=this.totalSumaVta; //el reconocimiento en los importes va a ser igual al total de la venta
+             
+        }
+
+        if(this.totalFinal>0 || this.reconocimientoCte==(this.subtotalVta+this.IVAVta+this.IEPSVta)) //si el total a pagar es positivo  o si el reconocimiento cubre exactamente el total de la venta
+        { 
+            this.reconocimientoSobrante=0.00; //el reconocimiento  sobrante sera cero
+            this.reconocimientoVta=this.reconocimientoCte; //el reconocimiento en los importes va a ser igual al reconocimiento total del cliente
+            
+        }
+
+        }
+      }
+
+    }else{
+
     
     let index = this.productos.indexOf(cve);
 
@@ -190,6 +246,7 @@ export class CarritoVtPage {
             this.reconocimientoVta=this.reconocimientoCte; //el reconocimiento en los importes va a ser igual al reconocimiento total del cliente
             
         }
+      } //cierre del else para producto que no es promo
 }
 
   
@@ -489,10 +546,21 @@ openModalPromos(){ //manda abrir el fragmento de productos
  
     if(this.productos.length === 0){   //si es el primer producto que se agrega a la venta entra a esta opcion (el arreglo estaba vacio)
        
-      
+      this.productos = []
         for(var i = 0, len = producto.length; i < len; i++){
-            this.productos[i] = producto[i];
-
+           //this.productos[i] = producto[i];
+           if(producto[0].promo){
+            console.log("inisde if", producto[0].promo)
+            this.productos.push(this.promo ={promo:producto[i].promo,
+              nombre: producto[i].nombre,
+              precio:producto[i].precio,
+              cantidad:producto[i].cantidad,
+              iva:producto[i].iva,
+              ieps:producto[i].ieps,
+              importe:producto[i].importe,
+              equivalencia:producto[i].equivalencia})
+           }
+           console.log(this.productos, "despues del if")
             //calcula los valores finales de la venta
             this.subtotalVta= producto[i].importe - (producto[i].iva + producto[i].ieps)
             console.log(producto[i].importe - (producto[i].iva + producto[i].ieps), "subtotal")
