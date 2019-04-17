@@ -22,7 +22,8 @@ export class CarritoVtPage {
   precios = [];
   NotaVta: Array<any> = []; 
   preventa: any;
-  promo
+  deletePromo
+ 
 
   tipRuta
  
@@ -86,7 +87,7 @@ export class CarritoVtPage {
         console.log(this.vendedor, 'constructor')
       })
         
-       this.productos = []
+       this.productos;
        this.nav=navCtrl;
        this.cliente = navParams.get('cliente');
  
@@ -152,16 +153,25 @@ export class CarritoVtPage {
     console.log(cve, "borrar")
     if(cve.promo){
       console.log("entra en if", cve.promo)
-      for(var i = 0; i<this.productos.length; i++){
+      this.deletePromo = []
+      for(var y = 0; y<this.productos.length; y++){
         console.log(this.productos.length)
-        console.log(this.productos[i].promo, cve.promo,"compara")
-        if(this.productos[i].promo === cve.promo){
+        console.log(this.productos[y].promo, cve.promo,"compara")
+        if(this.productos[y].promo == cve.promo){
+          this.deletePromo.push(this.productos[y])
+        }
+      }
+      var numerote = this.deletePromo.length
+      console.log(numerote,"contador maybe")
+   // let index = this.productos.indexOf(this.productos[y]);
+    //if(index > -1){
+    //  console.log("index menos 1")
+     //   this.productos.splice(index, 1);
+   // }
 
-          let index = this.productos.indexOf(cve);
-
-    if(index > -1){
-        this.productos.splice(index, 1);
-    }
+   for(var q = 0; q<this.productos.length; q++){
+    if(this.productos[q].promo == cve.promo){
+          this.productos.splice(q,numerote);
 
 
       //inicializar en cero antes de recalcular
@@ -198,8 +208,7 @@ export class CarritoVtPage {
             this.reconocimientoVta=this.reconocimientoCte; //el reconocimiento en los importes va a ser igual al reconocimiento total del cliente
             
         }
-
-        }
+      }
       }
 
     }else{
@@ -545,31 +554,27 @@ openModalPromos(){ //manda abrir el fragmento de productos
     console.log(producto, "producto")
  
     if(this.productos.length === 0){   //si es el primer producto que se agrega a la venta entra a esta opcion (el arreglo estaba vacio)
+          this.subtotalVta= 0
+          this.IVAVta= 0
+          this.IEPSVta = 0
+          this.totalSumaVta= 0
        
-      this.productos = []
-        for(var i = 0, len = producto.length; i < len; i++){
-           //this.productos[i] = producto[i];
-           if(producto[0].promo){
-            console.log("inisde if", producto[0].promo)
-            this.productos.push(this.promo ={promo:producto[i].promo,
-              nombre: producto[i].nombre,
-              precio:producto[i].precio,
-              cantidad:producto[i].cantidad,
-              iva:producto[i].iva,
-              ieps:producto[i].ieps,
-              importe:producto[i].importe,
-              equivalencia:producto[i].equivalencia})
-           }
-           console.log(this.productos, "despues del if")
+      
+       // for(var i = 0, len = producto.length; i < len; i++){
+         console.log(producto.length, "largo de producto")
+        for(var i = 0; i < producto.length; i++){
+          console.log(i,"variable i")
+            this.productos[i] = producto[i];
+
             //calcula los valores finales de la venta
-            this.subtotalVta= producto[i].importe - (producto[i].iva + producto[i].ieps)
-            console.log(producto[i].importe - (producto[i].iva + producto[i].ieps), "subtotal")
-            this.IVAVta= producto[i].iva;
-            console.log(producto[i].iva, "iva")
-            this.IEPSVta = producto[i].ieps;
-            console.log(producto[i].ieps, "ieps")
-            this.totalSumaVta=  producto[i].importe;
-            console.log(producto[i].importe,"total")
+            this.subtotalVta= producto[i].importe - (producto[i].iva + producto[i].ieps)+ this.subtotalVta
+            console.log(producto[i].importe - (producto[i].iva + producto[i].ieps)+ this.subtotalVta, "subtotal") 
+            this.IVAVta= producto[i].iva + this.IVAVta;
+            console.log(producto[i].iva +this.IVAVta, "iva")
+            this.IEPSVta = producto[i].ieps + this.IEPSVta;
+            console.log(producto[i].ieps + this.IEPSVta, "ieps")
+            this.totalSumaVta=  producto[i].importe + this.totalSumaVta;
+            console.log(producto[i].importe +this.totalSumaVta,"total")
            
             //calculo para kilolitros
            this.KLAcumVta=producto[i].equivalencia;
