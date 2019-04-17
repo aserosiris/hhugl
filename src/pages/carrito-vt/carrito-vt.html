@@ -89,6 +89,9 @@
             <ion-row >
               <ion-col col-12>
                 <span>
+                  <div *ngIf="producto.promo">
+                      <b>Promocion:{{producto.promo}}</b>
+                  </div>
                   <b>{{producto.clave}} {{producto.nombre}}</b>
                 </span>
               </ion-col>
