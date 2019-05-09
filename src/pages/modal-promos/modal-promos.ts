@@ -91,8 +91,8 @@ promo3 = 0;
   }
 
   showPrompt(producto){   //ventana emergente para agregar cantidad de piezas
-    if(producto === 'promo91'){
-      producto = this.promo1;
+    if(producto === 'promo1'){
+      producto = this.promo91;
     }else if(producto === 'promo2'){
       producto = this.promo92;
     }else if(producto === 'promo3'){
@@ -109,7 +109,7 @@ promo3 = 0;
       producto = this.promo98;
     }
 
-    console.log(producto)
+    console.log(producto, "contenido de producto")
     
     const prompt = this.alertCtrl.create({
          
@@ -148,14 +148,14 @@ promo3 = 0;
                   clave: producto[i].PM_CLAVE_PRODUCTO,
                   nombre: producto[i].PD_NOMBRE,
                   precio:producto[i].PM_PRECIOXUNIDAD_PROMO,
-                  cantidad: data.cantidad * producto[i].PM_CANTIDAD,
+                  cantidad: data.cantidad * producto[i].UM_CANTIDAD,
                   iva:producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
                   ieps:producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
                   importe: (data.cantidad * producto[i].PM_CANTIDAD * producto[i].PM_PRECIOXUNIDAD_PROMO) + (producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD) + producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD,
                   equivalencia:producto[i].UM_CANTIDAD * data.cantidad * producto[i].PM_CANTIDAD
                 })
               
-                console.log(this.objeto)
+                console.log(this.objeto, "objeto")
                 }
     
             }

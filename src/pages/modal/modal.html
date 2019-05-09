@@ -25,11 +25,10 @@
   <ion-item *ngFor="let item of items">
     <ion-row>
       <ion-col col-2>
-        <ion-avatar item-start>
-          <img src="http://placehold.it/10x10">
-        </ion-avatar>
+          <ion-thumbnail item-left><img [src]="item.PD_IMAGEN"></ion-thumbnail>
+
       </ion-col>
-      <ion-col col-10 class="rowCol">
+      <ion-col col-12 class="rowCol">
         <h2  class="companyname" text-wrap>
           {{item.PD_NOMBRE}}
         </h2>

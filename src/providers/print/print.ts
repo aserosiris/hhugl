@@ -106,13 +106,24 @@ export class PrintProvider {
     for( var i=0; i<clavesVta.length;i++)
     {  
       //Concatena ceros al numero de clave para que todos sean  de 4 digitos
-    let  guardaClave=  "\r\n" + clavesVta[i]['clave']+" "+ clavesVta[i]['nombre']+
+    if(clavesVta[i]['promo']){
+    let  guardaClave=
+    "\r\n" + "  Promo:"+" "+ clavesVta[i]['promo']+
+    "\r\n" + clavesVta[i]['clave']+" "+ clavesVta[i]['nombre']+
+    "\r\n" + "  Cant:"+clavesVta[i]['cantidad']+ " Precio:$"+clavesVta[i]['precio']+
+    "\r\n" + "  IVA:$"+parseFloat(clavesVta[i]['iva']).toFixed(2)+" IEPS:$"+parseFloat(clavesVta[i]['ieps']).toFixed(2)+
+    "\r\n" + "  Importe:$"+parseFloat(clavesVta[i]['importe']).toFixed(2)+
+    "\r\n" + "===============================";
+       this.printParteClaves=this.printParteClaves+guardaClave;
+    }else{
+      let  guardaClave=  "\r\n" + clavesVta[i]['clave']+" "+ clavesVta[i]['nombre']+
     "\r\n" + "  Cant:"+clavesVta[i]['cantidad']+ " Precio:$"+clavesVta[i]['precio']+
     "\r\n" + "  IVA:$"+parseFloat(clavesVta[i]['iva']).toFixed(2)+" IEPS:$"+parseFloat(clavesVta[i]['ieps']).toFixed(2)+
     "\r\n" + "  Importe:$"+parseFloat(clavesVta[i]['importe']).toFixed(2)+
     "\r\n" + "===============================";
        this.printParteClaves=this.printParteClaves+guardaClave;
     }
+  }
 
 
 

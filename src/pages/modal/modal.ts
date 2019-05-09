@@ -94,7 +94,7 @@ promoSQL: any;
         handler: data=>{
      
           if(Number(data.cantidad)){
-           if(data.cantidad > producto.EXISTENCIA){
+           if(data.cantidad > producto.EXISTENCIA || data.cantidad < 0){
             this.inventarioIn();
             this.closeModal();
            }else{
@@ -264,12 +264,12 @@ promoSQL: any;
     }).then((db: SQLiteObject) => {
       
       this.consulta = `select * from(
-        SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, CASE WHEN PRC_PRECIO_ESPECIAL IS NOT NULL THEN PRC_PRECIO_ESPECIAL ELSE PR_PRECIO END AS PRECIO_FINAL, CASE WHEN  PRC_IVA IS NOT NULL THEN PRC_IVA ELSE PR_IVA END IVA_FINAL, CASE WHEN PRC_IEPS IS NOT NULL THEN PRC_IEPS ELSE PR_IEPS END AS IEPS_FINAL, PR_SUCURSAL, PR_EMPRESA,UM_CANTIDAD, IN_CANTIDAD AS EXISTENCIA/**/
-                  FROM (SELECT Cve.PD_CLAVE, Cve.PD_NOMBRE, Cve.PD_UM, Cve.PD_GRUPO, Cve.PRC_PRECIO_ESPECIAL, Cve.PRC_IVA, Cve.PRC_IEPS, Cve.PR_PRECIO, Cve.PR_IVA, Cve.PR_IEPS, Cve.PR_SUCURSAL, Cve.PR_EMPRESA, Cve.UM_CANTIDAD, Inv.IN_CANTIDAD
+        SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, PD_IMAGEN, CASE WHEN PRC_PRECIO_ESPECIAL IS NOT NULL THEN PRC_PRECIO_ESPECIAL ELSE PR_PRECIO END AS PRECIO_FINAL, CASE WHEN  PRC_IVA IS NOT NULL THEN PRC_IVA ELSE PR_IVA END IVA_FINAL, CASE WHEN PRC_IEPS IS NOT NULL THEN PRC_IEPS ELSE PR_IEPS END AS IEPS_FINAL, PR_SUCURSAL, PR_EMPRESA,UM_CANTIDAD, IN_CANTIDAD AS EXISTENCIA/**/
+                  FROM (SELECT Cve.PD_CLAVE, Cve.PD_NOMBRE, Cve.PD_UM, Cve.PD_GRUPO, Cve.PD_IMAGEN, Cve.PRC_PRECIO_ESPECIAL, Cve.PRC_IVA, Cve.PRC_IEPS, Cve.PR_PRECIO, Cve.PR_IVA, Cve.PR_IEPS, Cve.PR_SUCURSAL, Cve.PR_EMPRESA, Cve.UM_CANTIDAD, Inv.IN_CANTIDAD
               
-          FROM( SELECT A.PD_CLAVE, A.PD_NOMBRE, A.PD_UM, A.PD_GRUPO,A.PRC_PRECIO_ESPECIAL, A.PRC_IVA, A.PRC_IEPS, B.PR_PRECIO, B.PR_IVA, B.PR_IEPS, B.PR_SUCURSAL, B.PR_EMPRESA, A.UM_CANTIDAD /**/
-                               FROM (SELECT Y.PD_CLAVE, Y.PD_NOMBRE, Y.PD_UM, Y.PD_GRUPO, X.PRC_CLAVE, X.PRC_PRECIO_ESPECIAL, X.PRC_IVA, X.PRC_IEPS, Y.UM_CANTIDAD /**/
-                                    FROM (SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, UM_CANTIDAD/**/ FROM tb_hh_productos  WHERE (PD_BAJA <> 'B')) AS Y
+          FROM( SELECT A.PD_CLAVE, A.PD_NOMBRE, A.PD_UM, A.PD_GRUPO, A.PD_IMAGEN, A.PRC_PRECIO_ESPECIAL, A.PRC_IVA, A.PRC_IEPS, B.PR_PRECIO, B.PR_IVA, B.PR_IEPS, B.PR_SUCURSAL, B.PR_EMPRESA, A.UM_CANTIDAD /**/
+                               FROM (SELECT Y.PD_CLAVE, Y.PD_NOMBRE, Y.PD_UM, Y.PD_GRUPO, Y.PD_IMAGEN, X.PRC_CLAVE, X.PRC_PRECIO_ESPECIAL, X.PRC_IVA, X.PRC_IEPS, Y.UM_CANTIDAD /**/
+                                    FROM (SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, UM_CANTIDAD, PD_IMAGEN/**/ FROM tb_hh_productos  WHERE (PD_BAJA <> 'B')) AS Y
                                                     LEFT JOIN
                                            (SELECT  PRC_CLAVE, PRC_PRECIO_ESPECIAL, PRC_IVA, PRC_IEPS FROM tb_hh_precio_cliente WHERE  (PRC_RUTA_CLIE = ?) AND (PRC_CLIENTE = ?)) AS X 
                                                            ON Y.PD_CLAVE = X.PRC_CLAVE) AS A
@@ -288,6 +288,7 @@ promoSQL: any;
         for(var i=0; i<res.rows.length; i++) {
           this.productosSQL.push({PD_CLAVE:res.rows.item(i).PD_CLAVE,PD_NOMBRE:res.rows.item(i).PD_NOMBRE, 
             PD_UM:res.rows.item(i).PD_UM,
+            PD_IMAGEN:res.rows.item(i).PD_IMAGEN,
             PD_GRUPO:res.rows.item(i).PD_GRUPO, 
             PRECIO_FINAL:res.rows.item(i).PRECIO_FINAL, 
             IVA_FINAL:res.rows.item(i).IVA_FINAL,
@@ -298,6 +299,7 @@ promoSQL: any;
             EXISTENCIA:res.rows.item(i).EXISTENCIA
           })
         }
+        console.log(this.productosSQL, "productos")
       })
       .catch(e => console.log(e));
   });

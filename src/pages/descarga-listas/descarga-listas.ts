@@ -32,6 +32,8 @@ export class DescargaListasPage {
 
   loading: any;
   rutamail
+  img: any = [];
+  vacio: string;
   
   consulta:string;
   clientes = [];
@@ -132,7 +134,10 @@ export class DescargaListasPage {
          alert(JSON.stringify(error));
        });
 
-        
+       Storage.get('imagenes').then((val) => {
+         this.img = val;
+        //console.log('Your age is', val);
+      });
 
 
 
@@ -321,7 +326,7 @@ export class DescargaListasPage {
       db.executeSql('CREATE TABLE IF NOT EXISTS clientes(CL_CLIENTE INTEGER PRIMARY KEY,CL_NOMNEGOCIO TEXT, CL_PUNTOVENTA TEXT, CL_RFC TEXT, CL_DIRNEGOCIO TEXT, CL_COLNEGOCIO TEXT, CL_CPCLIE INT, CL_CIUDADNEGOCIO TEXT, CL_CORPORACION INT, CL_RUTA INT, CL_LUNES TEXT, CL_MARTES TEXT, CL_MIERCOLES TEXT, CL_JUEVES TEXT, CL_VIERNES TEXT, CL_SABADO TEXT, CL_DOMINGO TEXT, CL_BAJA TEXT, CL_SUCURSAL INT, CL_EMPRESA INT  )', [])      
       .then(res => console.log('Executed SQL Clientes'))
       .catch(e => console.log(e));
-      db.executeSql('CREATE TABLE IF NOT EXISTS tb_hh_productos(PD_CLAVE INT, PD_NOMBRE TEXT, PD_UM TEXT, PD_GRUPO INT, PD_CANTXCAJA INT, PD_BAJA TEXT, PD_SUCURSAL INT, PD_EMPRESA INT, UM_CANTIDAD REAL)', [])
+      db.executeSql('CREATE TABLE IF NOT EXISTS tb_hh_productos(PD_CLAVE INT, PD_NOMBRE TEXT, PD_UM TEXT, PD_GRUPO INT, PD_CANTXCAJA INT, PD_BAJA TEXT, PD_SUCURSAL INT, PD_EMPRESA INT, UM_CANTIDAD REAL, PD_IMAGEN TEXT)', [])
       .then(res => console.log('Executed SQL productos'))
       .catch(e => console.log(e));
       db.executeSql('CREATE TABLE IF NOT EXISTS tb_hh_precios(PR_TIPO_PRECIO INT, PR_CLAVE INT, PR_PRECIO REAL, PR_IVA REAL, PR_IEPS REAL, PR_SUCURSAL INT, PR_EMPRESA INT)', [])
@@ -424,22 +429,32 @@ export class DescargaListasPage {
    
       
       for(var i = 0; i<this.productos.length; i++){
-        var PD_CLAVE = this.productos[i].PD_CLAVE;
-        var PD_NOMBRE = this.productos[i].PD_NOMBRE.replace(/(^\s+|\s+$)/g,'');
-        var PD_UM = this.productos[i].PD_UM;
-        var PD_GRUPO = this.productos[i].PD_GRUPO;
-        var PD_CANTXCAJA = this.productos[i].PD_CANTXCAJA;
-        var PD_BAJA = this.productos[i].PD_BAJA;
-        var PD_SUCURSAL = this.productos[i].PD_SUCURSAL;
-        var PD_EMPRESA = this.productos[i].PD_EMPRESA;
-        var UM_CANTIDAD = this.productos[i].UM_CANTIDAD
 
-        var query2 = "INSERT INTO tb_hh_productos(PD_CLAVE,PD_NOMBRE,PD_UM,PD_GRUPO,PD_CANTXCAJA, PD_BAJA, PD_SUCURSAL, PD_EMPRESA, UM_CANTIDAD ) VALUES (?,?,?,?,?,?,?,?,?)";
-        db.executeSql(query2, [PD_CLAVE,PD_NOMBRE,PD_UM,PD_GRUPO,PD_CANTXCAJA,PD_BAJA,
-          PD_SUCURSAL,PD_EMPRESA,UM_CANTIDAD]).then(function(res) {
-        }, function (err) {
-          console.error(err);
-        });
+        for(var e = 0; e<this.img.length; e++){
+
+          if(this.productos[i].PD_CLAVE === this.img[e].clave){
+
+          var PD_CLAVE = this.productos[i].PD_CLAVE;
+          var PD_NOMBRE = this.productos[i].PD_NOMBRE.replace(/(^\s+|\s+$)/g,'');
+          var PD_UM = this.productos[i].PD_UM;
+          var PD_GRUPO = this.productos[i].PD_GRUPO;
+          var PD_CANTXCAJA = this.productos[i].PD_CANTXCAJA;
+          var PD_BAJA = this.productos[i].PD_BAJA;
+          var PD_SUCURSAL = this.productos[i].PD_SUCURSAL;
+          var PD_EMPRESA = this.productos[i].PD_EMPRESA;
+          var UM_CANTIDAD = this.productos[i].UM_CANTIDAD;
+          var PD_IMAGEN = this.img[e].imgs
+  
+          var query2 = "INSERT INTO tb_hh_productos(PD_CLAVE,PD_NOMBRE,PD_UM,PD_GRUPO,PD_CANTXCAJA, PD_BAJA, PD_SUCURSAL, PD_EMPRESA, UM_CANTIDAD, PD_IMAGEN ) VALUES (?,?,?,?,?,?,?,?,?,?)";
+          db.executeSql(query2, [PD_CLAVE,PD_NOMBRE,PD_UM,PD_GRUPO,PD_CANTXCAJA,PD_BAJA,
+            PD_SUCURSAL,PD_EMPRESA,UM_CANTIDAD,PD_IMAGEN]).then(function(res) {
+          }, function (err) {
+            console.error(err);
+          });
+          }
+          
+        }
+        
       }
 
       for(var i = 0; i<this.precios.length; i++){
