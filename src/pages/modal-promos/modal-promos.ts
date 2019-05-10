@@ -138,7 +138,7 @@ promo3 = 0;
           if(Number(data.cantidad)){
             this.objeto 
             for(var i = 0; i<producto.length; i++){
-              if(data.cantidad > producto[i].EXISTENCIA){
+              if(data.cantidad > producto[i].EXISTENCIA || data.cantidad > 0){
                 this.inventarioIn();
                 this.closeModal();
                }else{

@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 
@@ -95,8 +96,8 @@ import { TraspasoProvider } from '../providers/traspaso/traspaso';
     OnlineProvider,
     PreprintProvider,
     NotapreProvider,
-    TraspasoProvider
-
+    TraspasoProvider,
+    Geolocation
   ]
 })
 export class AppModule {}

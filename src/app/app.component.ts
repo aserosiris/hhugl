@@ -49,7 +49,7 @@ export class MyApp {
       {title: 'Descarga de Listas', component:'InicioDiaPage', icon:'create'},
       {title: 'Lista Clientes', component:'ClientesPage', icon:'list-box'},
       {title: 'PreVenta', component:'PreVentaClientesPage', icon:'search'},
-      {title: 'Leaderboard', component:'HomePage', icon:'archive'}
+      {title: 'Geolocalidad', component:'MapPage', icon:'archive'}
     ];
 
 
