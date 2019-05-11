@@ -126,23 +126,13 @@ export class MapPage {
         text:'Guardar',
         handler: data=>{
         for(var i=0; i<this.clientes.length; i++){
-
           if(this.clientes[i].CL_CLIENTE === parseInt(data.idClientes) ){
-           
-
-              this.presentConfirm(this.clientes[i].CL_NOMNEGOCIO, data.idClientes);
-            
-            //alert("Estas apunto de guardar cordenadas para el cliente: " +this.clientes[i].CL_NOMNEGOCIO+" ES ESTO CORRECTO")
+              this.presentConfirm(this.clientes[i].CL_NOMNEGOCIO, data.idClientes); 
           }//if
 
         }//for
-     
-       
         }
-  
-   
       }
-     
       ]
     });
     prompt.present();

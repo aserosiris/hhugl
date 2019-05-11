@@ -115,7 +115,7 @@ promo3 = 0;
          
 
       title:'Cantidad',
-      message:"Agrege cantidad a vender",
+      message:"Agrege cantidad de promos a vender",
       inputs: [
         {
           name:'cantidad',
@@ -137,8 +137,10 @@ promo3 = 0;
      
           if(Number(data.cantidad)){
             this.objeto 
+            console.log(data.cantidad, "cantidad de promo")
             for(var i = 0; i<producto.length; i++){
-              if(data.cantidad > producto[i].EXISTENCIA || data.cantidad > 0){
+              var promocanti = data.cantidad * producto[i].PM_CANTIDAD
+              if(promocanti> producto[i].EXISTENCIA || promocanti < 0 ){
                 this.inventarioIn();
                 this.closeModal();
                }else{
@@ -148,7 +150,7 @@ promo3 = 0;
                   clave: producto[i].PM_CLAVE_PRODUCTO,
                   nombre: producto[i].PD_NOMBRE,
                   precio:producto[i].PM_PRECIOXUNIDAD_PROMO,
-                  cantidad: data.cantidad * producto[i].UM_CANTIDAD,
+                  cantidad: data.cantidad * producto[i].PM_CANTIDAD,
                   iva:producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
                   ieps:producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
                   importe: (data.cantidad * producto[i].PM_CANTIDAD * producto[i].PM_PRECIOXUNIDAD_PROMO) + (producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD) + producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD,
