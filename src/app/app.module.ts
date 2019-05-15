@@ -8,6 +8,8 @@ import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { Geolocation } from '@ionic-native/geolocation';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
+
 
 
 
@@ -44,6 +46,7 @@ import { OnlineProvider } from '../providers/online/online';
 import { PreprintProvider } from '../providers/preprint/preprint';
 import { NotapreProvider } from '../providers/notapre/notapre';
 import { TraspasoProvider } from '../providers/traspaso/traspaso';
+
 
 
 
@@ -97,7 +100,10 @@ import { TraspasoProvider } from '../providers/traspaso/traspaso';
     PreprintProvider,
     NotapreProvider,
     TraspasoProvider,
-    Geolocation
+    Geolocation,
+    BackgroundGeolocation
+
+
   ]
 })
 export class AppModule {}

@@ -203,9 +203,16 @@ showPrompt(){   //ventana emergente para agregar cantidad de piezas
      
     }, function(error){
 
-      alert("error: " + JSON.stringify(error))
+      //alert("error: " + JSON.stringify(error))
        })
+       console.log(this.ruta, "ruta")
+       console.log(this.fechaHoraFinal, "fecha")
+       console.log(this.horaFinal, "hora")
+       console.log(this.estatus, "estatus")
        this.updateKun()
+       this.storage.remove('useremail');
+     this.nav.setRoot("LoginPage");
+     this.storage.remove('asistencia');
       }
 /*
  
@@ -219,9 +226,7 @@ showPrompt(){   //ventana emergente para agregar cantidad de piezas
       alert("Error : " + JSON.stringify(error));
       
      });
-     this.storage.remove('useremail');
-     this.nav.setRoot("LoginPage");
-     this.storage.remove('asistencia');
+     
   }
   
 

@@ -10,6 +10,8 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import 'rxjs/add/operator/catch';
 import { OnlineProvider } from './../../providers/online/online';
+
+
 //import { SqlUpProvider } from '../../providers/sql-up/sql-up'
 //ultima modificacion 12/feb/2019 12:45 pm
 declare var SqlServer: any;
