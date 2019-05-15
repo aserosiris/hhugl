@@ -15,6 +15,7 @@ export class ClientesPage {
 
   clientes = [];
   clientesSQL: Array<any> = [];
+  items: any;
 
   constructor(
     public navCtrl: NavController, 
@@ -23,6 +24,26 @@ export class ClientesPage {
     private sqlite: SQLite
     ) {
 
+  }
+
+  initializeItems() {
+    this.items = this.clientesSQL;
+  }
+
+  getItems(ev: any){
+    // Reset items back to all of the items
+
+    this.initializeItems();
+
+    // set val to the value of the searchbar
+    let val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.items = this.items.filter((item) => {
+        return (item.CL_CLIENTE.toString().toUpperCase().indexOf(val.toUpperCase()) > -1);
+      })
+    }
   }
 
 

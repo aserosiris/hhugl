@@ -8,40 +8,33 @@
 
 
 <ion-content >
-  <ion-item *ngFor="let cliente of clientesSQL; let i=index">
+  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+  <ion-item *ngFor="let item of items">
     <ion-row>
       <ion-col col-2>
 
       </ion-col>
       <ion-col col-10 class="rowCol">
         <h2 (click)="carritoVentas($event, cliente)" class="companyname" text-wrap>
-          {{cliente.CL_NOMNEGOCIO}}
+          {{item.CL_NOMNEGOCIO}}
         </h2>
         <ion-col class="dataCol">
           <ion-row>
             <ion-col col-12>
               <span>
                 <ion-icon name="ios-grid-outline" class="iconClass"> </ion-icon>
-                {{cliente.CL_CLIENTE}}
+                {{item.CL_CLIENTE}}
               </span>
             </ion-col>
             <ion-col col-12>
               <span>
                 <ion-icon name="contact" class="iconClass"> </ion-icon>
-                {{cliente.CL_PUNTOVENTA}}
+                {{item.CL_PUNTOVENTA}}
               </span>
             </ion-col>
             <ion-col col-12 text-wrap>
               <ion-icon name="pin" class="iconClass"></ion-icon>
-              {{cliente.CL_DIRNEGOCIO}}, {{cliente.CL_COLNEGOCIO}}
-            </ion-col>
-            <ion-col col-12 class="rating">
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              (4.5)
+              {{item.CL_DIRNEGOCIO}}, {{item.CL_COLNEGOCIO}}
             </ion-col>
           </ion-row>
         </ion-col>
