@@ -144,7 +144,6 @@ promo3 = 0;
                 this.inventarioIn();
                 this.closeModal();
                }else{
-    
                  this.carrito.push(this.objeto ={    //si usamos [{ ...}], [{ ... }]  crea un arreglo de arreglos
                   promo:producto[i].PM_CLAVE_PROMO,
                   clave: producto[i].PM_CLAVE_PRODUCTO,

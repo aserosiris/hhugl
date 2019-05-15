@@ -266,8 +266,9 @@ export class DescargaListasPage {
       
       console.log(this.asistencias[0])
       var sql = `SELECT EM_NUMERO, EM_NOMBRE FROM tb_hh_usuarios WHERE EM_NUMERO =?`
-      this.horaFinal=this.h+":"+this.m+":"+this.s
+      this.horaFinal=this.Hora+":"+this.Minutos+":"+this.Segundos
       this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaFinal;
+      console.log(this.horaFinal, "hora fecha final")
        return this.db.executeSql(sql,[this.asistencias[0]])
       
       })
@@ -323,7 +324,7 @@ export class DescargaListasPage {
       name: 'ionicdb.db',
       location: 'default'
     }).then((db: SQLiteObject) => {  
-      db.executeSql('CREATE TABLE IF NOT EXISTS clientes(CL_CLIENTE INTEGER PRIMARY KEY,CL_NOMNEGOCIO TEXT, CL_PUNTOVENTA TEXT, CL_RFC TEXT, CL_DIRNEGOCIO TEXT, CL_COLNEGOCIO TEXT, CL_CPCLIE INT, CL_CIUDADNEGOCIO TEXT, CL_CORPORACION INT, CL_RUTA INT, CL_LUNES TEXT, CL_MARTES TEXT, CL_MIERCOLES TEXT, CL_JUEVES TEXT, CL_VIERNES TEXT, CL_SABADO TEXT, CL_DOMINGO TEXT, CL_BAJA TEXT, CL_SUCURSAL INT, CL_EMPRESA INT  )', [])      
+      db.executeSql('CREATE TABLE IF NOT EXISTS clientes(CL_CLIENTE INTEGER PRIMARY KEY,CL_NOMNEGOCIO TEXT, CL_PUNTOVENTA TEXT, CL_RFC TEXT, CL_DIRNEGOCIO TEXT, CL_COLNEGOCIO TEXT, CL_CPCLIE INT, CL_CIUDADNEGOCIO TEXT, CL_CORPORACION INT, CL_RUTA INT, CL_LUNES TEXT, CL_MARTES TEXT, CL_MIERCOLES TEXT, CL_JUEVES TEXT, CL_VIERNES TEXT, CL_SABADO TEXT, CL_DOMINGO TEXT, CL_BAJA TEXT, CL_SUCURSAL INT, CL_EMPRESA INT, CL_TIPOV TEXT  )', [])      
       .then(res => console.log('Executed SQL Clientes'))
       .catch(e => console.log(e));
       db.executeSql('CREATE TABLE IF NOT EXISTS tb_hh_productos(PD_CLAVE INT, PD_NOMBRE TEXT, PD_UM TEXT, PD_GRUPO INT, PD_CANTXCAJA INT, PD_BAJA TEXT, PD_SUCURSAL INT, PD_EMPRESA INT, UM_CANTIDAD REAL, PD_IMAGEN TEXT)', [])
@@ -354,7 +355,7 @@ export class DescargaListasPage {
       .then(res => console.log('Executed SQL inventario'))
       .catch(e => console.log(e));
       
-      db.executeSql('CREATE TABLE IF NOT EXISTS tb_hh_nota_venta(NV_NOTA TEXT, NV_CLIENTE INT, NV_RAZON_SOCIAL TEXT, NV_NOMBRE_CLIENTE TEXT, NV_FECHA DATE, NV_RUTA INT, NV_TIPO_VENTA TEXT, NV_SUBTOTAL REAL, NV_IVA REAL, NV_IEPS REAL, NV_RECONOCIMIENTO REAL, NV_TOTAL REAL, NV_CORPO_CLIENTE INT, NV_ESTATUS_NOTA TEXT, NV_KILOLITROS_VENDIDOS REAL, NV_UPLOAD INT )', [])
+      db.executeSql('CREATE TABLE IF NOT EXISTS tb_hh_nota_venta(NV_NOTA TEXT, NV_CLIENTE INT, NV_RAZON_SOCIAL TEXT, NV_NOMBRE_CLIENTE TEXT, NV_FECHA DATE, NV_RUTA INT, NV_TIPO_VENTA TEXT, NV_SUBTOTAL REAL, NV_IVA REAL, NV_IEPS REAL, NV_RECONOCIMIENTO REAL, NV_TOTAL REAL, NV_CORPO_CLIENTE INT, NV_ESTATUS_NOTA TEXT, NV_KILOLITROS_VENDIDOS REAL, NV_UPLOAD INT, NV_HORA TEXT )', [])
       .then(res => console.log('Executed SQL nota venta'))
       .catch(e => console.log(e));
       db.executeSql('CREATE TABLE IF NOT EXISTS tb_hh_nota_detalle(DN_FECHA DATE, DN_NOTA TEXT, DN_CLAVE INT, DN_DESCRIPCION TEXT, DN_CANTIDAD_PIEZAS REAL, DN_PRECIO REAL, DN_IVA REAL, DN_IEPS REAL, DN_IMPORTE REAL, DN_UPLOAD INT)', [])
@@ -415,11 +416,12 @@ export class DescargaListasPage {
         var CL_BAJA = this.clientes[i].CL_BAJA;
         var CL_SUCURSAL = this.clientes[i].CL_SUCURSAL;
         var CL_EMPRESA = this.clientes[i].CL_EMPRESA;
+        var CL_TIPOV = this.clientes[i].CL_TIPOV;
 
-        var query1 = "INSERT INTO clientes  (CL_CLIENTE,CL_NOMNEGOCIO,CL_PUNTOVENTA,CL_RFC,CL_DIRNEGOCIO,CL_COLNEGOCIO,CL_CPCLIE,CL_CIUDADNEGOCIO,CL_CORPORACION,CL_RUTA,CL_LUNES,CL_MARTES,CL_MIERCOLES,CL_JUEVES,CL_VIERNES,CL_SABADO,CL_DOMINGO,CL_BAJA,CL_SUCURSAL, CL_EMPRESA ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        var query1 = "INSERT INTO clientes  (CL_CLIENTE,CL_NOMNEGOCIO,CL_PUNTOVENTA,CL_RFC,CL_DIRNEGOCIO,CL_COLNEGOCIO,CL_CPCLIE,CL_CIUDADNEGOCIO,CL_CORPORACION,CL_RUTA,CL_LUNES,CL_MARTES,CL_MIERCOLES,CL_JUEVES,CL_VIERNES,CL_SABADO,CL_DOMINGO,CL_BAJA,CL_SUCURSAL, CL_EMPRESA, CL_TIPOV ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         db.executeSql(query1, [CL_CLIENTE,CL_NOMNEGOCIO,CL_PUNTOVENTA,CL_RFC,CL_DIRNEGOCIO,CL_COLNEGOCIO,
           CL_CPCLIE,CL_CIUDADNEGOCIO,CL_CORPORACION, CL_RUTA, CL_LUNES, CL_MARTES, CL_MIERCOLES, CL_JUEVES, 
-          CL_VIERNES,CL_SABADO,CL_DOMINGO,CL_BAJA,CL_SUCURSAL,CL_EMPRESA ]).then(function(res) {
+          CL_VIERNES,CL_SABADO,CL_DOMINGO,CL_BAJA,CL_SUCURSAL,CL_EMPRESA,CL_TIPOV ]).then(function(res) {
         }, function (err) {
           console.error(err);
         });
@@ -640,25 +642,256 @@ export class DescargaListasPage {
                      {this.diaStr='0'+this.dia;}
 
                      //Agrega un cero al numero de mes cuando sea menor a 10
-                     if(this.mes<10)
-                     {this.mesStr ='0'+this.mes;}
+                     //if(this.mes<10)
+                     //{this.mesStr ='0'+this.mes;}
+
+                     //SWITCH PARA EL MES PARA EL COMER DEL DIABLO PARA EL FOLIO DEL DIABLO
+                      console.log(this.mes)
+                     switch(this.mes){
+                       case 1:{
+                        this.mesStr = 'A'
+                        break
+                       }
+                       case 2:{
+                        this.mesStr = 'B'
+                        break
+                       }
+                       case 3:{
+                        this.mesStr = 'C'
+                        break
+                       }
+                       case 4:{
+                        this.mesStr = 'D'
+                        break
+                       }
+                       case 5:{
+                        this.mesStr = 'X'
+                        break
+                       }
+                       case 6:{
+                        this.mesStr = 'F'
+                        break
+                       }
+                       case 7:{
+                        this.mesStr = 'G'
+                        break
+                       }
+                       case 8:{
+                        this.mesStr = 'H'
+                        break
+                       }
+                       case 9:{
+                        this.mesStr = 'I'
+                        break
+                       }
+                       case 10:{
+                        this.mesStr = 'J'
+                        break
+                       }
+                       case 11:{
+                        this.mesStr = 'K'
+                        break
+                       }
+                       case 12:{
+                        this.mesStr = 'L'
+                        break
+                       }
+                     }
 
                      //Extrae solo los ultimos dos digitos del año en curso
                      this.anioStr=this.anio.toString().substring(2);
 
                      //Concatena ceros al numero de ruta segun la cantidad de carasteres en el numero
+                     /*
                      if(this.rutaStr.length==1)
                      {this.rutaStr='000'+this.rutaStr;}
                      if(this.rutaStr.length==2)
                      {this.rutaStr='00'+this.rutaStr;}
                      if(this.rutaStr.length==3)
                      {this.rutaStr='0'+this.rutaStr;}
-
+                     */
+                    //CAMBIO DE RUTA PARA EL COMER DEL DIABLO
+                    if(this.rutaStr.length == 1){
+                      this.rutaStr = '0'+this.rutaStr;
+                    }else if(this.rutamail>=100){
+                      switch(this.rutaStr){
+                        case '100':{
+                          this.rutaStr = 'A0'
+                          break
+                        }
+                        case '101':{
+                          this.rutaStr = 'A1'
+                          break
+                        }
+                        case '102':{
+                          this.rutaStr = 'A2'
+                          break
+                        }
+                        case '103':{
+                          this.rutaStr = 'A3'
+                          break
+                        }
+                        case '104':{
+                          this.rutaStr = 'A4'
+                          break
+                        }
+                        case '105':{
+                          this.rutaStr = 'A5'
+                          break
+                        }
+                        case '106':{
+                          this.rutaStr = 'A6'
+                          break
+                        }
+                        case '107':{
+                          this.rutaStr = 'A7'
+                          break
+                        }
+                        case '108':{
+                          this.rutaStr = 'A8'
+                          break
+                        }
+                        case '109':{
+                          this.rutaStr = 'A9'
+                          break
+                        }
+                      }
+                    }else if(this.rutamail>=110){
+                      switch(this.rutaStr){
+                        case '110':{
+                          this.rutaStr = 'B0'
+                          break
+                        }
+                        case '111':{
+                          this.rutaStr = 'B1'
+                          break
+                        }
+                        case '112':{
+                          this.rutaStr = 'B2'
+                          break
+                        }
+                        case '113':{
+                          this.rutaStr = 'B3'
+                          break
+                        }
+                        case '114':{
+                          this.rutaStr = 'B4'
+                          break
+                        }
+                        case '115':{
+                          this.rutaStr = 'B5'
+                          break
+                        }
+                        case '116':{
+                          this.rutaStr = 'B6'
+                          break
+                        }
+                        case '117':{
+                          this.rutaStr = 'B7'
+                          break
+                        }
+                        case '118':{
+                          this.rutaStr = 'B8'
+                          break
+                        }
+                        case '119':{
+                          this.rutaStr = 'B9'
+                          break
+                        }
+                      }
+                    }else if(this.rutamail>=120){
+                      switch(this.rutaStr){
+                        case '120':{
+                          this.rutaStr = 'C0'
+                          break
+                        }
+                        case '121':{
+                          this.rutaStr = 'C1'
+                          break
+                        }
+                        case '122':{
+                          this.rutaStr = 'C2'
+                          break
+                        }
+                        case '123':{
+                          this.rutaStr = 'C3'
+                          break
+                        }
+                        case '124':{
+                          this.rutaStr = 'C4'
+                          break
+                        }
+                        case '125':{
+                          this.rutaStr = 'C5'
+                          break
+                        }
+                        case '126':{
+                          this.rutaStr = 'C6'
+                          break
+                        }
+                        case '127':{
+                          this.rutaStr = 'C7'
+                          break
+                        }
+                        case '128':{
+                          this.rutaStr = 'C8'
+                          break
+                        }
+                        case '129':{
+                          this.rutaStr = 'C9'
+                          break
+                        }
+                      }
+                    }else if(this.rutamail>=130){
+                      switch(this.rutaStr){
+                        case '130':{
+                          this.rutaStr = 'D0'
+                          break
+                        }
+                        case '131':{
+                          this.rutaStr = 'D1'
+                          break
+                        }
+                        case '132':{
+                          this.rutaStr = 'D2'
+                          break
+                        }
+                        case '133':{
+                          this.rutaStr = 'D3'
+                          break
+                        }
+                        case '134':{
+                          this.rutaStr = 'D4'
+                          break
+                        }
+                        case '135':{
+                          this.rutaStr = 'D5'
+                          break
+                        }
+                        case '136':{
+                          this.rutaStr = 'D6'
+                          break
+                        }
+                        case '137':{
+                          this.rutaStr = 'D7'
+                          break
+                        }
+                        case '138':{
+                          this.rutaStr = 'D8'
+                          break
+                        }
+                        case '139':{
+                          this.rutaStr = 'D9'
+                          break
+                        }
+                      }
+                    }
                      //Guarda el folio en variable
 
                      
                      
-                     this.folioIni=this.rutaStr+this.diaStr+this.mesStr+this.anioStr+'000';
+                     //this.folioIni=this.rutaStr+this.diaStr+this.mesStr+this.anioStr+'000';
+                     this.folioIni = this.rutaStr+this.mesStr+this.diaStr+'000'
                      console.log(this.folioIni+ '      ->folio Inicializado');
                      this.prefolioIni= 'p'+this.folioIni;
                      console.log(this.prefolioIni+ '      ->prefolio Inicializado');

@@ -210,7 +210,7 @@ export class HomePage {
         {
           name:'notaC',
           placeholder:'#',
-          type:'number',
+          //type:'number',
        },
       ],
       buttons:[
@@ -224,6 +224,7 @@ export class HomePage {
         
         text:'Cancelar Nota',
         handler: dataC=>{
+          console.log(dataC.notaC, 'en el capture')
           this.notaCaptu=dataC.notaC;
           this.tipoOperacion='C';
          
@@ -263,7 +264,7 @@ export class HomePage {
             this.KLAcumVta=res.rows.item(0).NV_KILOLITROS_VENDIDOS;
             this.estatusNota=res.rows.item(0).NV_ESTATUS_NOTA;
   
-       return console.log(this.clienteNota);
+       return console.log(this.clienteNota," noat que voy a dar cuello");
       }).then(res=>{
       
         if(this.estatusNota=='CANCELADA' && this.tipoOperacion=='C')
@@ -510,7 +511,7 @@ export class HomePage {
       name: 'ionicdb.db',
       location: 'default'
       }).then((db: SQLiteObject) => {
-
+        console.log(this.notaCaptu, "nota a cancelar")
        this.updateEstatus = `UPDATE tb_hh_nota_venta SET NV_ESTATUS_NOTA='CANCELADA' WHERE NV_NOTA=?`
 
        db.executeSql(this.updateEstatus, [this.notaCaptu])
@@ -521,12 +522,12 @@ export class HomePage {
               this.ReimprimirNota();
         })
 
-        SqlServer.execute("UPDATE TB_HH_NOTA_VENTA SET  NV_ESTATUS_NOTA ='CANCELADA' WHERE NV_NOTA ="+this.notaCaptu+"", function(event) {    
+        SqlServer.execute("UPDATE TB_HH_NOTA_VENTA SET  NV_ESTATUS_NOTA ='CANCELADA' WHERE NV_NOTA ='"+this.notaCaptu+"'", function(event) {    
  
           alert("Update complete : " + JSON.stringify(event));
          
         }, function(error) {
-          alert("Error : " + JSON.stringify(error));
+          alert("Error : " + JSON.stringify(error + "error este cabron"));
         });
     
   }
@@ -565,7 +566,8 @@ export class HomePage {
           NV_CORPO_CLIENTE: res.rows.item(i).NV_CORPO_CLIENTE,
           NV_ESTATUS_NOTA: res.rows.item(i).NV_ESTATUS_NOTA,
           NV_KILOLITROS_VENDIDOS: res.rows.item(i).NV_KILOLITROS_VENDIDOS,
-          NV_UPLOAD: res.rows.item(i).NV_UPLOAD
+          NV_UPLOAD: res.rows.item(i).NV_UPLOAD,
+          NV_HORA:res.rows.item(i).NV_HORA
         })
         
         
@@ -589,7 +591,7 @@ export class HomePage {
     console.log(this.notaVenta1,'el then al final')
     for(var e=0; e<this.notaVenta1.length; e++){
       console.log('dentro del for insert')
-  SqlServer.execute("INSERT INTO TB_HH_NOTA_VENTA (NV_NOTA, NV_CLIENTE ,NV_RAZON_SOCIAL ,NV_NOMBRE_CLIENTE ,NV_FECHA,NV_RUTA,NV_TIPO_VENTA,NV_SUBTOTAL,NV_IVA,NV_IEPS,NV_RECONOCIMIENTO,NV_TOTAL ,NV_CORPO_CLIENTE,NV_ESTATUS_NOTA,NV_KILOLITROS_VENDIDOS ,NV_UPLOAD)  VALUES('"+this.notaVenta1[e]["NV_NOTA"]+"',"+this.notaVenta1[e]["NV_CLIENTE"]+",'"+this.notaVenta1[e]["NV_RAZON_SOCIAL"]+"','"+this.notaVenta1[e]["NV_NOMBRE_CLIENTE"]+"','"+this.notaVenta1[e]["NV_FECHA"]+"',"+this.notaVenta1[e]["NV_RUTA"]+",'"+this.notaVenta1[e]["NV_TIPO_VENTA"]+"',"+this.notaVenta1[e]["NV_SUBTOTAL"]+","+this.notaVenta1[e]["NV_IVA"]+","+this.notaVenta1[e]["NV_IEPS"]+","+this.notaVenta1[e]["NV_RECONOCIMIENTO"]+","+this.notaVenta1[e]["NV_TOTAL"]+","+this.notaVenta1[e]["NV_CORPO_CLIENTE"]+",'"+this.notaVenta1[e]["NV_ESTATUS_NOTA"]+"',"+this.notaVenta1[e]["NV_KILOLITROS_VENDIDOS"]+","+this.notaVenta1[e]["NV_UPLOAD"]+")", function(event) {    
+  SqlServer.execute("INSERT INTO TB_HH_NOTA_VENTA (NV_NOTA, NV_CLIENTE ,NV_RAZON_SOCIAL ,NV_NOMBRE_CLIENTE ,NV_FECHA,NV_RUTA,NV_TIPO_VENTA,NV_SUBTOTAL,NV_IVA,NV_IEPS,NV_RECONOCIMIENTO,NV_TOTAL ,NV_CORPO_CLIENTE,NV_ESTATUS_NOTA,NV_KILOLITROS_VENDIDOS ,NV_UPLOAD, NV_HORA)  VALUES('"+this.notaVenta1[e]["NV_NOTA"]+"',"+this.notaVenta1[e]["NV_CLIENTE"]+",'"+this.notaVenta1[e]["NV_RAZON_SOCIAL"]+"','"+this.notaVenta1[e]["NV_NOMBRE_CLIENTE"]+"','"+this.notaVenta1[e]["NV_FECHA"]+"',"+this.notaVenta1[e]["NV_RUTA"]+",'"+this.notaVenta1[e]["NV_TIPO_VENTA"]+"',"+this.notaVenta1[e]["NV_SUBTOTAL"]+","+this.notaVenta1[e]["NV_IVA"]+","+this.notaVenta1[e]["NV_IEPS"]+","+this.notaVenta1[e]["NV_RECONOCIMIENTO"]+","+this.notaVenta1[e]["NV_TOTAL"]+","+this.notaVenta1[e]["NV_CORPO_CLIENTE"]+",'"+this.notaVenta1[e]["NV_ESTATUS_NOTA"]+"',"+this.notaVenta1[e]["NV_KILOLITROS_VENDIDOS"]+","+this.notaVenta1[e]["NV_UPLOAD"]+",'"+this.notaVenta1[e]["NV_HORA"]+"')", function(event) {    
    
      // alert("Update complete : " + JSON.stringify(event));
      

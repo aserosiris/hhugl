@@ -5,8 +5,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage} from '@ionic/storage';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite'; //AGREGAR PARA USAR SQL
 import { CarritoVtPage } from '../pages/carrito-vt/carrito-vt';
+import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
+import { ok } from 'assert';
 
-
+declare var SqlServer: any;
 
 @Component({
   templateUrl: 'app.html'
@@ -23,7 +25,24 @@ export class MyApp {
   db: SQLiteObject;
   notaVenta
   detalleVenta
+  ruta
 
+  fechaActual2=new Date();
+  fechaActual=new Date();
+  fechaHoraFinal:string;
+  //variables para mostrar el horario
+
+     //variables tipo string para mostrar el horario
+  h='';
+  m='';
+  s='';
+
+  horaFinal:string;
+  //variables para mostrar el horario
+   Hora = this.fechaActual2.getHours();
+   Minutos = this.fechaActual2.getMinutes();
+   Segundos = this.fechaActual2.getSeconds();
+   estatus = "C"
 
 
 
@@ -104,6 +123,7 @@ export class MyApp {
           this.nav.setRoot("LoginPage");
         }
         if(loggedIn !== null){
+          this.ruta=loggedIn
           this.nav.setRoot("HomePage");
         }
       });
@@ -156,22 +176,53 @@ showPrompt(){   //ventana emergente para agregar cantidad de piezas
 //******************************************************************************* */
 
   logout(){
-    this.storage.remove('useremail');
-    this.nav.setRoot("LoginPage");
-    this.storage.remove('asistencia');
-
+    
+    this.makeHora()
 
     
 
 
   }
-
-  obtenerRuta(){
-    
+  makeHora(){
+    this.horaFinal=this.Hora+":"+this.Minutos+":"+this.Segundos
+    this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaFinal;
+    this.cierreMaquina();
+    //this.updateCun();
   }
+
+  cierreMaquina(){
+    SqlServer.init("201.174.70.186", "SQLSERVER", "sa", "TuLucernita2017", "SistemaComercial", function(event) {
+      // alert(JSON.stringify(event));
+       
+     }, function(error) {
+       alert(JSON.stringify(error));
+     });
+     SqlServer.execute("INSERT INTO TB_HH_CIERRE_RUTA (CR_RUTA, CR_FECHA, CR_HORA,CR_ESTATUS ) VALUES ("+this.ruta+",'"+this.fechaHoraFinal+"','"+this.horaFinal+"','"+this.estatus+"')", function(event){    
+ 
+      alert("Update complete : " + JSON.stringify(event));
+     
+    }, function(error){
+
+      alert("error: " + JSON.stringify(error))
+       })
+       this.updateKun()
+      }
 /*
  
   */
-
+  updateKun(){
+    SqlServer.execute("UPDATE TB_HH_CIERRE_RUTA SET  CR_HORA ='"+this.horaFinal+"', CR_ESTATUS = '"+this.estatus+"' WHERE CR_RUTA ="+this.ruta+" AND CR_FECHA ='"+this.fechaHoraFinal+"'", function(event) {    
+ 
+      alert("Update complete : " + JSON.stringify(event));
+     
+     }, function(error) {
+      alert("Error : " + JSON.stringify(error));
+      
+     });
+     this.storage.remove('useremail');
+     this.nav.setRoot("LoginPage");
+     this.storage.remove('asistencia');
+  }
+  
 
 }

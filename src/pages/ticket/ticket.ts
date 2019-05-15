@@ -41,6 +41,13 @@ export class TicketPage {
 
   tipoImpresion:string;
 
+  fechaActual2=new Date();
+  horaFinal: string;
+  //variables para mostrar el horario
+   Hora = this.fechaActual2.getHours();
+   Minutos = this.fechaActual2.getMinutes();
+   Segundos = this.fechaActual2.getSeconds();
+
    //VARIABLES***********
 
    producto: any;
@@ -73,14 +80,12 @@ export class TicketPage {
     fechaActual=new Date();
     fechaHoraFinal:string;
     //variables para mostrar el horario
-     Hora = this.fechaActual.getHours();
-     Minutos = this.fechaActual.getMinutes();
-     Segundos = this.fechaActual.getSeconds();
+  
        //variables tipo string para mostrar el horario
     h='';
     m='';
     s='';
-    horaFinal=''; //concatenado de todas las partes que conforman la hora
+
 
     updateReconocimiento:string; //string para el update del arreglo restante
 
@@ -115,7 +120,7 @@ export class TicketPage {
 
       this.producto = JSON.parse(JSON.stringify(this.navParams.get('producto'))); 
 
-
+      this.horaFinal=this.Hora+":"+this.Minutos+":"+this.Segundos
       this.Storage.get('vendedor').then((val) =>{
         this.vendedor = parseInt(val);
         console.log(this.vendedor)
@@ -433,7 +438,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
           db.executeSql(`SELECT FL_ULTIMO_FOLIO FROM tb_hh_ultimo_folio ORDER BY FECHA DESC LIMIT 1`,[]).then(res => {
             console.log((res.rows.item(0).FL_ULTIMO_FOLIO))
 
-            this.numNotacomp=parseInt(res.rows.item(0).FL_ULTIMO_FOLIO.substring(10));
+            this.numNotacomp=parseInt(res.rows.item(0).FL_ULTIMO_FOLIO.substring(5));//regresar substring a 10 cuando ya no se use el comer
            
               this.numNotacomp=this.numNotacomp+1;
               this.numNotaStrcomp=this.numNotacomp.toString();
@@ -443,7 +448,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
             if(this.numNotaStrcomp.length==2)
                 { this.numNotaStrcomp='0'+this.numNotaStrcomp }
 
-                this.ultimoFolioGuardado = this.ultimoFolioGuardado.substring(0,10)+ this.numNotaStrcomp
+                this.ultimoFolioGuardado = this.ultimoFolioGuardado.substring(0,5)+ this.numNotaStrcomp //regresar substring a 10 cuando ya no se use el comer
             })
           //****************************************** */
 
@@ -452,7 +457,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
           this.ultimoFolioGuardado = res.rows.item(0).FL_ULTIMO_FOLIO
         
           
-         this.nuevoNumNota=parseInt(this.ultimoFolio.substring(10));
+         this.nuevoNumNota=parseInt(this.ultimoFolio.substring(5));//regresar substring a 10 cuando ya no se use el comer
 
         // this.numNotacomp=parseInt(this.ultimoFolio.substring(10));
         
@@ -482,7 +487,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
           
          
            //concatena la parte fija (es fijo  los primeros 10 caracteres) y el valor que incremeta el folio en la nota de venta  (los ultimos 3 caracteres)
-           this.ultimoFolio=this.ultimoFolio.substring(0,10)+this.nuevoStrNota;
+           this.ultimoFolio=this.ultimoFolio.substring(0,5)+this.nuevoStrNota;//regresar substring a 10 cuando ya no se use el comer
            console.log(this.ultimoFolio +'  folio nuevo'); 
 
          //  this.ultimoFolioGuardado = this.ultimoFolioGuardado.substring(0,10)+ this.numNotaStrcomp
@@ -521,7 +526,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
             db.executeSql(`SELECT FL_ULTIMO_FOLIO FROM tb_hh_ultimo_folio ORDER BY FECHA DESC LIMIT 1`,[]).then(res => {
               console.log((res.rows.item(0).FL_ULTIMO_FOLIO))
 
-              var guardadosql =parseInt(res.rows.item(0).FL_ULTIMO_FOLIO.substring(10));
+              var guardadosql =parseInt(res.rows.item(0).FL_ULTIMO_FOLIO.substring(5)); //regresar substring a 10 cuando ya no se use el comer
              
               if(guardadosql >=this.nuevoNumNota ){
 
@@ -573,9 +578,9 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
 
         console.log('variables' ,this.ultimoFolio, this.cliente.CL_CLIENTE, this.cliente.CL_PUNTOVENTA,this.cliente.CL_NOMNEGOCIO,this.fechaHoraFinal,this.rutamail, this.tipoVentaCliente, this.subtotalVta, this.IVAVta, this.IEPSVta, this.reconocimientoVta, this.totalFinal, this.cliente.CL_CORPORACION, 'ACTIVA', this.KLAcumVta);
 
-         this.InsertaVta = `INSERT INTO tb_hh_nota_venta (NV_NOTA, NV_CLIENTE, NV_RAZON_SOCIAL, NV_NOMBRE_CLIENTE, NV_FECHA, NV_RUTA, NV_TIPO_VENTA, NV_SUBTOTAL, NV_IVA, NV_IEPS, NV_RECONOCIMIENTO, NV_TOTAL, NV_CORPO_CLIENTE, NV_ESTATUS_NOTA, NV_KILOLITROS_VENDIDOS, NV_UPLOAD) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+         this.InsertaVta = `INSERT INTO tb_hh_nota_venta (NV_NOTA, NV_CLIENTE, NV_RAZON_SOCIAL, NV_NOMBRE_CLIENTE, NV_FECHA, NV_RUTA, NV_TIPO_VENTA, NV_SUBTOTAL, NV_IVA, NV_IEPS, NV_RECONOCIMIENTO, NV_TOTAL, NV_CORPO_CLIENTE, NV_ESTATUS_NOTA, NV_KILOLITROS_VENDIDOS, NV_UPLOAD, NV_HORA) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
 
-         db.executeSql(this.InsertaVta, [this.ultimoFolio, this.cliente.CL_CLIENTE, this.cliente.CL_PUNTOVENTA,this.cliente.CL_NOMNEGOCIO,this.fechaHoraFinal,this.rutamail, this.tipoVentaCliente, this.subtotalVta, this.IVAVta, this.IEPSVta, this.reconocimientoVta, this.totalFinal, this.cliente.CL_CORPORACION, 'ACTIVA', this.KLAcumVta, 0])
+         db.executeSql(this.InsertaVta, [this.ultimoFolio, this.cliente.CL_CLIENTE, this.cliente.CL_PUNTOVENTA,this.cliente.CL_NOMNEGOCIO,this.fechaHoraFinal,this.rutamail, this.tipoVentaCliente, this.subtotalVta, this.IVAVta, this.IEPSVta, this.reconocimientoVta, this.totalFinal, this.cliente.CL_CORPORACION, 'ACTIVA', this.KLAcumVta, 0,this.horaFinal])
          .catch(e => console.log(e));    
        }).then(res =>{
         
