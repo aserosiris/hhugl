@@ -71,6 +71,7 @@ export class TicketPage {
     nuevoNumNota:number; // guarda el nuevo folio de nota en formato numerico.
     updateFol:string; //string para el update del folio
     numNotacomp:number
+    numNotacomp1:number
     numNotaStrcomp:string
 
     InsertaVta:string; //inserta los datos de la nota de venta en la tabla de SQLite
@@ -354,7 +355,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
     else
     {
       this.tipoImpresion='[ORIGINAL]';                // id es la direccion de la impresora conectada
-      let foo=this.printProvider.ProveedorimpresionNotaVta(id,this.cliente, this.clavesVta,this.tipoVentaCliente, this.reconocimientoVta, this.subtotalVta,this.IVAVta, this.totalFinal,this.KLAcumVta, this.IEPSVta,   this.rutamail, this.tipoImpresion, this.ultimoFolio, this.vendedor, this.nomVendedor);  
+      let foo=this.printProvider.ProveedorimpresionNotaVta(id,this.cliente, this.clavesVta,this.tipoVentaCliente, this.reconocimientoVta, this.subtotalVta,this.IVAVta, this.totalFinal,this.KLAcumVta, this.IEPSVta,   this.rutamail, this.tipoImpresion, this.ultimoFolio, this.vendedor, this.nomVendedor,this.fechaHoraFinal);  
       this.Storage.set('folio',this.ultimoFolio)
     //reimprimir nota infinita cantidad de veces hasta que seleccione No
     let alert = this.alertCtrl.create({
@@ -398,7 +399,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
                   alert.dismiss(true);
                 this.tipoImpresion='[REIMPRESION]';
                 
-                  this.printProvider.ProveedorimpresionNotaVta(id,this.cliente, this.clavesVta,this.tipoVentaCliente, this.reconocimientoVta, this.subtotalVta,this.IVAVta, this.totalFinal,this.KLAcumVta, this.IEPSVta,   this.rutamail, this.tipoImpresion, this.ultimoFolio,  this.vendedor, this.nomVendedor)
+                  this.printProvider.ProveedorimpresionNotaVta(id,this.cliente, this.clavesVta,this.tipoVentaCliente, this.reconocimientoVta, this.subtotalVta,this.IVAVta, this.totalFinal,this.KLAcumVta, this.IEPSVta,   this.rutamail, this.tipoImpresion, this.ultimoFolio,  this.vendedor, this.nomVendedor, this.fechaHoraFinal)
                  this.opcionReimprimir(id);
                   return false;
                   
@@ -433,15 +434,23 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
         db.executeSql(this.consultaFolio,[]) // string de consulta,[ ] o[ x,x,x,x] segun los ?
         .then(res => {
 
+          
 
           //***************************************** */
           db.executeSql(`SELECT FL_ULTIMO_FOLIO FROM tb_hh_ultimo_folio ORDER BY FECHA DESC LIMIT 1`,[]).then(res => {
             console.log((res.rows.item(0).FL_ULTIMO_FOLIO))
 
             this.numNotacomp=parseInt(res.rows.item(0).FL_ULTIMO_FOLIO.substring(5));//regresar substring a 10 cuando ya no se use el comer
-           
-              this.numNotacomp=this.numNotacomp+1;
+            console.log(this.numNotacomp, 'nuevo num nota')
+            
+           if(this.numNotacomp == 0){
+            this.numNotacomp=this.numNotacomp+2;
               this.numNotaStrcomp=this.numNotacomp.toString();
+           }else{
+            this.numNotacomp=this.numNotacomp+1;
+              this.numNotaStrcomp=this.numNotacomp.toString();
+           }
+              
             if(this.numNotaStrcomp.length==1)
                  { this.numNotaStrcomp='00'+this.numNotaStrcomp }
 
@@ -458,16 +467,22 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
         
           
          this.nuevoNumNota=parseInt(this.ultimoFolio.substring(5));//regresar substring a 10 cuando ya no se use el comer
-
-        // this.numNotacomp=parseInt(this.ultimoFolio.substring(10));
+            console.log(this.nuevoNumNota, 'nuevonumnota')
+         if(this.nuevoNumNota === 0){
+           this.nuevoNumNota = 1
+         }else{
+           // this.numNotacomp=parseInt(this.ultimoFolio.substring(10));
         
         //calcula el siguiente folio a utilizar sumandole 1+
          this.nuevoNumNota=this.nuevoNumNota+1;
+         console.log(this.nuevoNumNota, "nuevo numnota +1")
+         }
 
+       
          //this.numNotacomp=this.numNotacomp+1
 
          this.nuevoStrNota=this.nuevoNumNota.toString();
-
+            console.log(this.nuevoStrNota, "string de nota nuevo num")
          //this.numNotaStrcomp=this.nuevoNumNota.toString();
 
          // concatena los ceros necesarios para completar la cantidad de caracteres del ticket
@@ -514,12 +529,14 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
 
         db.executeSql(fechaFolio,[this.fechaActual.toLocaleDateString('en-GB')])
         .then(res =>{
-          console.log(res,"resultado de select")
+          console.log(res,"resultado de select para actualizar folio")
           console.log(res.rows.length," tamanio de select")
           if(res.rows.length == 0){
            console.log("WE ARE HERE NIGGA!")
             db.executeSql(ultFolio,[this.ultimoFolio,this.fechaActual.toLocaleDateString('en-GB')])
             .catch(e => console.log(e,"se inserto el folio")).then(res=>{
+              db.executeSql(this.updateFol, [this.ultimoFolio])
+                .catch(e => console.log("esto es donde falla", e))
               this.insertarVenta()
             })
           }else{
@@ -527,7 +544,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
               console.log((res.rows.item(0).FL_ULTIMO_FOLIO))
 
               var guardadosql =parseInt(res.rows.item(0).FL_ULTIMO_FOLIO.substring(5)); //regresar substring a 10 cuando ya no se use el comer
-             
+             console.log(guardadosql, "folio en memoria")
               if(guardadosql >=this.nuevoNumNota ){
 
                 db.executeSql(this.updateFol, [this.ultimoFolioGuardado])
@@ -537,14 +554,15 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
                   this.ultimoFolio = this.ultimoFolioGuardado;
                   console.log('update de folio guardado',this.ultimoFolioGuardado)   
                   this.Storage.set('folio',this.ultimoFolioGuardado)
-
+                  db.executeSql(this.updateFol, [this.ultimoFolio])
+                .catch(e => console.log("esto es donde falla", e))
                   this.insertarVenta()
                 })
                
-              }else{
+              }
 
                 db.executeSql(this.updateFol, [this.ultimoFolio])
-                .catch(e => console.log(e));
+                .catch(e => console.log("esto es donde falla", e))
        
                   console.log('update de folio',this.ultimoFolio)   
                   this.Storage.set('folio',this.ultimoFolio)
@@ -553,7 +571,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
                   this.insertarVenta()
                 })
 
-              }
+              
             })
            
             

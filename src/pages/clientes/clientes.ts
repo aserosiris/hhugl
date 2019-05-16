@@ -53,13 +53,13 @@ export class ClientesPage {
       location: 'default'
     }).then((db: SQLiteObject) => {
  
-      db.executeSql('SELECT CL_CLIENTE, CL_NOMNEGOCIO, CL_PUNTOVENTA, CL_RFC, CL_DIRNEGOCIO, CL_COLNEGOCIO, CL_CPCLIE, CL_CORPORACION , CL_CIUDADNEGOCIO FROM clientes', [])
+      db.executeSql('SELECT CL_CLIENTE, CL_NOMNEGOCIO, CL_PUNTOVENTA, CL_RFC, CL_DIRNEGOCIO, CL_COLNEGOCIO, CL_CPCLIE, CL_CORPORACION , CL_CIUDADNEGOCIO, CL_TIPOV FROM clientes', [])
       .then(res => {
         this.clientesSQL = [];
         for(var i=0; i<res.rows.length; i++) {
           this.clientesSQL.push({CL_CLIENTE:res.rows.item(i).CL_CLIENTE,CL_NOMNEGOCIO:res.rows.item(i).CL_NOMNEGOCIO,CL_CIUDADNEGOCIO:res.rows.item(i).CL_CIUDADNEGOCIO, CL_CPCLIE:res.rows.item(i).CL_CPCLIE,
             CL_PUNTOVENTA:res.rows.item(i).CL_PUNTOVENTA,CL_RFC:res.rows.item(i).CL_RFC,CL_DIRNEGOCIO:res.rows.item(i).CL_DIRNEGOCIO,
-            CL_COLNEGOCIO:res.rows.item(i).CL_COLNEGOCIO, CL_CORPORACION:res.rows.item(i).CL_CORPORACION,
+            CL_COLNEGOCIO:res.rows.item(i).CL_COLNEGOCIO, CL_CORPORACION:res.rows.item(i).CL_CORPORACION, CL_TIPOV:res.rows.item(i).CL_TIPOV
             })
         }
       })
@@ -88,9 +88,15 @@ export class ClientesPage {
 
 
   carritoVentas(event, clientesSQL){
-    this.navCtrl.setRoot("CarritoVtPage",{
-      cliente: clientesSQL
-    });
+    if(clientesSQL.CL_TIPOV == "SIN ASIGNAR"){
+      alert("Error : No se puede vender a un cliente que no tenga un tipo de venta asignado");
+    
+    }else{
+      this.navCtrl.setRoot("CarritoVtPage",{
+        cliente: clientesSQL
+      });
+    }
+    
   }
 
 }

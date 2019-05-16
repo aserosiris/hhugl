@@ -25,6 +25,7 @@ export class HomePage {
 //  clientes = [];
   clientesSQL: any;//objeto para guardar los resultados de la consulta de clientes
   rutaNum;
+  fechaHoraFinal
 
 
   selectedPrinter:any=[];
@@ -313,6 +314,24 @@ export class HomePage {
    }
 
 
+   buscarFecha(){
+    this.sqlite.create({
+      name: 'ionicdb.db',
+      location: 'default'
+    }).then((db: SQLiteObject) => {
+
+      this.notaVtaDetaSQL = [];
+      db.executeSql('SELECT NV_HORA  FROM tb_hh_nota_venta WHERE NV_NOTA=?', [this.notaCaptu])
+      .then(res => {
+        for(var a=0; a<res.rows.length; a++) {
+          this.fechaHoraFinal = res.rows.item(a).NV_HORA
+         }
+        
+        console.log (this.fechaHoraFinal);
+          })
+   })
+  }
+
   buscarDetalleNota() //guarda en un arreglo los productos que contiene la nota 
   {
     this.sqlite.create({
@@ -378,7 +397,7 @@ export class HomePage {
     else
     {             
                                                           // id es la direccion de la impresora conectada
-      let foo=this.printProvider.ProveedorimpresionNotaVta(id,this.clientesSQL, this.notaVtaDetaSQL,this.tipoVentaCliente, this.reconocimientoVta, this.subtotalVta,this.IVAVta, this.totalFinal,this.KLAcumVta, this.IEPSVta,   this.rutaNota, this.tipoImpresion, this.notaFolio, this.vendedor, this.nomVendedor);  
+      let foo=this.printProvider.ProveedorimpresionNotaVta(id,this.clientesSQL, this.notaVtaDetaSQL,this.tipoVentaCliente, this.reconocimientoVta, this.subtotalVta,this.IVAVta, this.totalFinal,this.KLAcumVta, this.IEPSVta,   this.rutaNota, this.tipoImpresion, this.notaFolio, this.vendedor, this.nomVendedor, this.fechaHoraFinal);  
 
     //reimprimir nota 2  veces o seleccione No
     let alert = this.alertCtrl.create({
@@ -388,7 +407,7 @@ export class HomePage {
               text: 'SI',
               handler: () => {
                   alert.dismiss(true);
-                  let foo=this.printProvider.ProveedorimpresionNotaVta(id,this.clientesSQL, this.notaVtaDetaSQL,this.tipoVentaCliente, this.reconocimientoVta, this.subtotalVta,this.IVAVta, this.totalFinal,this.KLAcumVta, this.IEPSVta,   this.rutaNota, this.tipoImpresion, this.notaFolio, this.vendedor, this.nomVendedor);   
+                  let foo=this.printProvider.ProveedorimpresionNotaVta(id,this.clientesSQL, this.notaVtaDetaSQL,this.tipoVentaCliente, this.reconocimientoVta, this.subtotalVta,this.IVAVta, this.totalFinal,this.KLAcumVta, this.IEPSVta,   this.rutaNota, this.tipoImpresion, this.notaFolio, this.vendedor, this.nomVendedor, this.fechaHoraFinal);   
                   return false;
               }
           }, {

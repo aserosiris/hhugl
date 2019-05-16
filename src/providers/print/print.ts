@@ -39,7 +39,7 @@ export class PrintProvider {
 
   }
 
-  ProveedorimpresionNotaVta(address,cliente,clavesVta,tipoVentaCliente, reconocimientoVta,subtotalVta,IVAVta, totalFinal,KLAcumVta,IEPSVta, rutamail, tipoImpresion, ultimoFolio,numVendedor, nomVendedor )
+  ProveedorimpresionNotaVta(address,cliente,clavesVta,tipoVentaCliente, reconocimientoVta,subtotalVta,IVAVta, totalFinal,KLAcumVta,IEPSVta, rutamail, tipoImpresion, ultimoFolio,numVendedor, nomVendedor, fechaHoraFinal )
   {
     if(address==null||address==""||address==undefined)
     {
@@ -88,7 +88,7 @@ export class PrintProvider {
     "\r\n" + " "+
     "\r\n" + "RUTA: "+rutamail+
     "\r\n" + "FOLIO: "+ultimoFolio+
-    "\r\n" + "FECHA: "+this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaFinal+
+    "\r\n" + "FECHA: "+fechaHoraFinal+
     "\r\n" + "TIPO DE VENTA:"+tipoVentaCliente+
     "\r\n" + " "+
     "\r\n" + "# CLIENTE: "+cliente.CL_CLIENTE+
@@ -182,6 +182,9 @@ else
     "\r\n" + "     WWW.LECHELUCERNA.COM"+
     "\r\n" + " TEL. 8925000 EXT.VENTAS 2112"+
     "\r\n" + "  APPVENTAS Ver.1.0.RLHDFO19"+
+    "\r\n" + " "+
+    "\r\n" + " "+
+    "\r\n" + " "+
     "\r\n" + " "+
     "\r\n" + " "+
     "\r\n" + " ";
@@ -378,6 +381,7 @@ DecenasY(strSin, numUnidades){
   this.printParteReconocimiento='';
   this.printParteReconocimiento='';
   this.printParteClaves='';
+
    }
 
 

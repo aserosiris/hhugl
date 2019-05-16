@@ -93,7 +93,7 @@ export class CarritoVtPage {
  
        this.numCliente=49;
        this.nombreCliente=' ';
-       this.tipoVentaCliente='CONTADO';
+       this.tipoVentaCliente=this.cliente.CL_TIPOV;
        this.reconocimientoCte=0.00;
        this.revolventeCliente="236.96";
  
@@ -673,6 +673,42 @@ openModalPromos(){ //manda abrir el fragmento de productos
 }
 
 /***********************************************/
+showCheckbox() {
+  let alert = this.alertCtrl.create();
+  alert.setTitle('Que tipo de Obsequio es este?');
+
+  alert.addInput({
+    type: 'checkbox',
+    label: 'Obsequio 10X1',
+    value: 'OBSEQUIO_10X1',
+    checked: true
+  });
+
+  alert.addInput({
+    type: 'checkbox',
+    label: 'Obsequio Donativo',
+    value: 'OBSEQUIO_DONATIVO'
+  });
+
+  alert.addInput({
+    type: 'checkbox',
+    label: 'Obsequio Degustacion',
+    value: 'OBSEQUIO_DEGUSTACION'
+  });
+
+  alert.addButton('Cancel');
+  alert.addButton({
+    text: 'Okay',
+    handler: data => {
+      console.log('Checkbox data:', data);
+      //this.testCheckboxOpen = false;
+      this.tipoVentaCliente = data;
+    }
+  });
+  alert.present();
+}
+
+
 
 
 

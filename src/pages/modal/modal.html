@@ -21,7 +21,8 @@
 
 <ion-content >
   
-    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-searchbar placeholder="Buscar Por Nombre" (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-searchbar type="tel" placeholder="Buscar Por Clave" (ionInput)="getItemsXclave($event)"></ion-searchbar>
   <ion-item *ngFor="let item of items">
     <ion-row>
       <ion-col col-2>

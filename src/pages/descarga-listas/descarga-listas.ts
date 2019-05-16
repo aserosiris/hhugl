@@ -948,7 +948,7 @@ export class DescargaListasPage {
    mangeku(){
     this.folioCambio().then(res =>{
       var folio=JSON.stringify(res)
-      console.log(folio)
+      console.log(folio, "folio del mangeku")
 
       if(folio !='"[[]]"'){
         
