@@ -68,7 +68,8 @@ export class MyApp {
       {title: 'Descarga de Listas', component:'InicioDiaPage', icon:'create'},
       {title: 'Lista Clientes', component:'ClientesPage', icon:'list-box'},
       {title: 'PreVenta', component:'PreVentaClientesPage', icon:'search'},
-      {title: 'Punteo', component:'MapPage', icon:'archive'}
+      {title: 'Punteo', component:'MapPage', icon:'archive'},
+      {title: 'Rastreo', component:'GeoTrackerPage', icon:'archive'}
     ];
 
 
@@ -103,6 +104,10 @@ export class MyApp {
 
     })
   }
+
+
+
+
 
   ionViewWillEnter(){
     this.storage.get('useremail').then((val) =>{

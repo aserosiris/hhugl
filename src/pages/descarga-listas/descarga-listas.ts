@@ -138,7 +138,7 @@ export class DescargaListasPage {
          this.img = val;
         //console.log('Your age is', val);
       });
-
+      
 
 
   }
@@ -295,6 +295,7 @@ export class DescargaListasPage {
         console.log(this.nombresVendedores)
         //this.nombresVendedores[1]={EM_NOMBRE: res1.rows.item(0).EM_NOMBRE,EM_NUMERO:res1.rows.item(0).EM_NUMERO}
         return this.nombresVendedores[1]={EM_NOMBRE: 'Union de Ganaderos',EM_NUMERO:'9999'}
+        
        }
       
      }).then(res2 =>{
@@ -304,16 +305,34 @@ export class DescargaListasPage {
       this.consulta2 = `INSERT  INTO tb_hh_asistencia  (AS_RUTA,AS_FECHA, AS_NUMERO_VENDEDOR, AS_NOMBRE_VENDEDOR, AS_NUMERO_AYUDANTE, AS_NOMBRE_AYUDANTE, AS_NUMERO_AYUDANTE2, AS_NOMBRE_AYUDANTE2) VALUES (?,?,?,?,?,?,?,?)  `
       this.db.executeSql(this.consulta2,[this.rutamail,Date(),this.nombresVendedores[0].EM_NUMERO,this.nombresVendedores[0].EM_NOMBRE,this.nombresVendedores[1].EM_NUMERO,this.nombresVendedores[1].EM_NOMBRE,this.nombresVendedores[2].EM_NUMERO,this.nombresVendedores[2].EM_NOMBRE])
       .catch(e => console.log("las cosas se fuero a la shit aqui"));
+      this.subirAsstencia()
        }else{
         this.nombresVendedores[2]={EM_NOMBRE:'Union de Ganaderos',EM_NUMERO:'9999'}
-        console.log(this.nombresVendedores)
+        console.log(this.nombresVendedores,"esta es donde llega el final")
         this.consulta2 = `INSERT  INTO tb_hh_asistencia  (AS_RUTA,AS_FECHA, AS_NUMERO_VENDEDOR, AS_NOMBRE_VENDEDOR, AS_NUMERO_AYUDANTE, AS_NOMBRE_AYUDANTE, AS_NUMERO_AYUDANTE2, AS_NOMBRE_AYUDANTE2) VALUES (?,?,?,?,?,?,?,?)  `
         this.db.executeSql(this.consulta2,[this.rutamail,this.fechaHoraFinal,this.nombresVendedores[0].EM_NUMERO,this.nombresVendedores[0].EM_NOMBRE,this.nombresVendedores[1].EM_NUMERO,this.nombresVendedores[1].EM_NOMBRE,this.nombresVendedores[2].EM_NUMERO,this.nombresVendedores[2].EM_NOMBRE])
         .catch(e => console.log("las cosas se fuero a la shit aqui"));
+        this.subirAsstencia()
        }
      })
-  
+     
   //}
+
+}
+
+subirAsstencia(){
+  
+
+  console.log("aqui esta en la parte nueva")
+
+   
+    SqlServer.execute("INSERT INTO TB_HH_ASISTENCIA (AS_FECHA,AS_HORA, AS_RUTA, AS_NUM_VENDEDOR, AS_NOM_VENDEDOR, AS_NUM_AYUDANTE1, AS_NOM_AYUDANTE1, AS_NUM_AYUDANTE2, AS_NOM_AYUDANTE2)  VALUES('"+this.fechaHoraFinal+"','"+this.horaFinal+"',"+this.rutamail+","+this.nombresVendedores[0].EM_NUMERO+",'"+this.nombresVendedores[0].EM_NOMBRE+"',"+this.nombresVendedores[1].EM_NUMERO+",'"+this.nombresVendedores[1].EM_NOMBRE+"',"+this.nombresVendedores[2].EM_NUMERO+",'"+this.nombresVendedores[2].EM_NOMBRE+"')", function(event) {    
+ 
+       alert("Update complete : " + JSON.stringify(event));
+      
+     }, function(error) {
+       alert("Error : " + JSON.stringify(error));
+     });
 
 }
 

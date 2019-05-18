@@ -8,7 +8,7 @@ import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { Geolocation } from '@ionic-native/geolocation';
-import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 
 
 
