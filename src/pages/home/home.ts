@@ -177,8 +177,7 @@ export class HomePage {
       inputs: [
         {
           name:'notaR',
-          placeholder:'#',
-          type:'number',
+          placeholder:'#'
        },
       ],
       buttons:[

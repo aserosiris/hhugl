@@ -76,6 +76,7 @@ export class DescargaListasPage {
   anioStr=this.anio.toString();
 
   rutaStr='';
+  imgDefault: any
 
   objeto: any;
 
@@ -328,7 +329,7 @@ subirAsstencia(){
    
     SqlServer.execute("INSERT INTO TB_HH_ASISTENCIA (AS_FECHA,AS_HORA, AS_RUTA, AS_NUM_VENDEDOR, AS_NOM_VENDEDOR, AS_NUM_AYUDANTE1, AS_NOM_AYUDANTE1, AS_NUM_AYUDANTE2, AS_NOM_AYUDANTE2)  VALUES('"+this.fechaHoraFinal+"','"+this.horaFinal+"',"+this.rutamail+","+this.nombresVendedores[0].EM_NUMERO+",'"+this.nombresVendedores[0].EM_NOMBRE+"',"+this.nombresVendedores[1].EM_NUMERO+",'"+this.nombresVendedores[1].EM_NOMBRE+"',"+this.nombresVendedores[2].EM_NUMERO+",'"+this.nombresVendedores[2].EM_NOMBRE+"')", function(event) {    
  
-       alert("Update complete : " + JSON.stringify(event));
+       alert("Ya puedes Vender : " + JSON.stringify(event));
       
      }, function(error) {
        alert("Error : " + JSON.stringify(error));
@@ -452,7 +453,9 @@ subirAsstencia(){
       for(var i = 0; i<this.productos.length; i++){
 
         for(var e = 0; e<this.img.length; e++){
-
+          this.imgDefault ='assets/imgs/logo.png'
+          
+          //console.log(this.img.length, e," larog de fotos, largo recorido")
           if(this.productos[i].PD_CLAVE === this.img[e].clave){
 
           var PD_CLAVE = this.productos[i].PD_CLAVE;
