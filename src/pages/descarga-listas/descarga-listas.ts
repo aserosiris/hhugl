@@ -467,7 +467,7 @@ subirAsstencia(){
           var PD_SUCURSAL = this.productos[i].PD_SUCURSAL;
           var PD_EMPRESA = this.productos[i].PD_EMPRESA;
           var UM_CANTIDAD = this.productos[i].UM_CANTIDAD;
-          var PD_IMAGEN = this.img[e].imgs
+          var PD_IMAGEN = this.img[e].imgs;
   
           var query2 = "INSERT INTO tb_hh_productos(PD_CLAVE,PD_NOMBRE,PD_UM,PD_GRUPO,PD_CANTXCAJA, PD_BAJA, PD_SUCURSAL, PD_EMPRESA, UM_CANTIDAD, PD_IMAGEN ) VALUES (?,?,?,?,?,?,?,?,?,?)";
           db.executeSql(query2, [PD_CLAVE,PD_NOMBRE,PD_UM,PD_GRUPO,PD_CANTXCAJA,PD_BAJA,
