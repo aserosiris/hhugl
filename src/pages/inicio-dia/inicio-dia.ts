@@ -83,6 +83,9 @@ export class InicioDiaPage {
   LimpiarNotas:string;
   LimpiarDetalleNotas:string;
   LimpiarPedidos:string;
+  LimpiarPreVenta:string;
+  LimpiarPreVentaDetalle:string;
+  LimpiarPreFolio:string;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -299,6 +302,9 @@ borrarSQL(){
     this.LimpiarFolios = `DROP TABLE tb_hh_folio`
     db.executeSql(this.LimpiarFolios,[])
 
+    this.LimpiarFolios = `DROP TABLE tb_hh_folioPre`
+    db.executeSql(this.LimpiarFolios,[])
+
     this.LimpiarInventario = `DROP TABLE tb_hh_inventario`
     db.executeSql(this.LimpiarInventario,[])
 
@@ -308,10 +314,17 @@ borrarSQL(){
     this.LimpiarDetalleNotas = `DROP TABLE tb_hh_nota_detalle`
     db.executeSql(this.LimpiarDetalleNotas,[])
 
-    this.LimpiarPedidos = 'DROP TABLE tb_hh_pedidos'
+    this.LimpiarPedidos = 'DROP TABLE tb_hh_pedidos' 
     db.executeSql(this.LimpiarPedidos,[])
 
+    this.LimpiarPreVenta = 'DROP TABLE tb_hh_nota_PreVenta' 
+    db.executeSql(this.LimpiarPreVenta,[])
 
+    this.LimpiarPreVentaDetalle = 'DROP TABLE tb_hh_nota_PreVentaDetalle' 
+    db.executeSql(this.LimpiarPreVentaDetalle,[])
+
+    this.LimpiarPreFolio = 'DROP TABLE tb_hh_folioPre'
+    db.executeSql(this.LimpiarPreFolio,[])
   })
 }
 

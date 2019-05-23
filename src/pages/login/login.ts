@@ -37,7 +37,7 @@ export class LoginPage {
   ionViewDidLoad() {
     
   } 
-
+// funcion para redirigir a pagina de registro de usuarios
   registerPage(){
      this.navCtrl.push("RegisterPage");
   }
@@ -91,7 +91,7 @@ export class LoginPage {
 
     this.loading.present();
   }
-
+//agregar clave con imagen nueva por clave
   imgAJson(){
     this.imagenes.push(
       {clave:2,imgs:"assets/imgs/2.png"},
@@ -158,6 +158,7 @@ export class LoginPage {
     {clave:353,imgs:"assets/imgs/353.png"},
     {clave:355,imgs:"assets/imgs/355.png"},
     {clave:380,imgs:"assets/imgs/380.png"},
+    {clave:384,imgs:"assets/imgs/logo.png"},
     {clave:385,imgs:"assets/imgs/385.png"},
     {clave:389,imgs:"assets/imgs/389.png"},
     {clave:398,imgs:"assets/imgs/398.png"},

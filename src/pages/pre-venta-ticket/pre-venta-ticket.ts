@@ -42,6 +42,13 @@ export class PreVentaTicketPage {
 
   tipoImpresion:string;
 
+  fechaActual2=new Date();
+  horaFinal: string;
+  //variables para mostrar el horario
+   Hora = this.fechaActual2.getHours();
+   Minutos = this.fechaActual2.getMinutes();
+   Segundos = this.fechaActual2.getSeconds();
+
    //VARIABLES***********
 
    producto: any;
@@ -72,16 +79,12 @@ export class PreVentaTicketPage {
     //variable para fecha
     fechaActual=new Date();
     fechaHoraFinal:string;
-    //variables para mostrar el horario
-     Hora = this.fechaActual.getHours();
-     Minutos = this.fechaActual.getMinutes();
-     Segundos = this.fechaActual.getSeconds();
+    
        //variables tipo string para mostrar el horario
     h='';
     m='';
     s='';
-    horaFinal=''; //concatenado de todas las partes que conforman la hora
-
+   
     updateReconocimiento:string; //string para el update del arreglo restante
 
     db:SQLiteObject;
@@ -115,12 +118,12 @@ export class PreVentaTicketPage {
 
       this.producto = JSON.parse(JSON.stringify(this.navParams.get('producto'))); 
 
-
+      this.horaFinal=this.Hora+":"+this.Minutos+":"+this.Segundos
       this.Storage.get('vendedor').then((val) =>{
         this.vendedor = parseInt(val);
         console.log(this.vendedor)
       })
-
+      this.horaFinal=this.Hora+":"+this.Minutos+":"+this.Segundos
       this.Storage.get('nomVendedor').then((va) =>{
         this.nomVendedor = va;
         console.log(this.nomVendedor)
@@ -382,14 +385,14 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
        location: 'default'
      }).then((db: SQLiteObject) => {
 
-        this.consultaFolio = `select FL_ULTIMO_FOLIO  FROM tb_hh_folio`               
+        this.consultaFolio = `select FLP_ULTIMO_FOLIO  FROM tb_hh_folioPre`               
         db.executeSql(this.consultaFolio,[]) // string de consulta,[ ] o[ x,x,x,x] segun los ?
         .then(res => {
 
-          this.ultimoFolio=res.rows.item(0).FL_ULTIMO_FOLIO
+          this.ultimoFolio=res.rows.item(0).FLP_ULTIMO_FOLIO
           console.log(this.ultimoFolio +'  folio anterior');  
           
-         this.nuevoNumNota=parseInt(this.ultimoFolio.substring(10));
+         this.nuevoNumNota=parseInt(this.ultimoFolio.substring(6));
         
         //calcula el siguiente folio a utilizar sumandole 1+
          this.nuevoNumNota=this.nuevoNumNota+1;
@@ -404,7 +407,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
             { this.nuevoStrNota='0'+this.nuevoStrNota }
          
            //concatena la parte fija (es fijo  los primeros 10 caracteres) y el valor que incremeta el folio en la nota de venta  (los ultimos 3 caracteres)
-           this.ultimoFolio=this.ultimoFolio.substring(0,10)+this.nuevoStrNota;
+           this.ultimoFolio=this.ultimoFolio.substring(0,6)+this.nuevoStrNota;
            console.log(this.ultimoFolio +'  folio nuevo'); 
                 
            }).catch(e => console.log(e));       
@@ -422,7 +425,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
         location: 'default'
       }).then((db: SQLiteObject) => {
 
-         this.updateFol = `UPDATE tb_hh_folio SET FL_ULTIMO_FOLIO= ?`
+         this.updateFol = `UPDATE tb_hh_folioPre SET FLP_ULTIMO_FOLIO= ?`
  
          db.executeSql(this.updateFol, [this.ultimoFolio])
          .catch(e => console.log(e));
@@ -444,11 +447,11 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
       }).then((db: SQLiteObject) => {
         this.db = db;
 
-        console.log('variables' ,this.ultimoFolio, this.cliente.CL_CLIENTE, this.cliente.CL_PUNTOVENTA,this.cliente.CL_NOMNEGOCIO,this.fechaHoraFinal,this.rutamail, this.tipoVentaCliente, this.subtotalVta, this.IVAVta, this.IEPSVta, this.reconocimientoVta, this.totalFinal, this.cliente.CL_CORPORACION, 'ACTIVA', this.KLAcumVta);
+        console.log('variables' ,this.ultimoFolio, this.cliente.CL_CLIENTE, this.cliente.CL_PUNTOVENTA,this.cliente.CL_NOMNEGOCIO,this.fechaHoraFinal,this.rutamail, this.tipoVentaCliente, this.subtotalVta, this.IVAVta, this.IEPSVta, this.reconocimientoVta, this.totalFinal, this.cliente.CL_CORPORACION, 'ACTIVA', this.KLAcumVta,this.horaFinal);
 
-         this.InsertaVta = `INSERT INTO tb_hh_nota_PreVenta (NPV_NOTA, NPV_CLIENTE, NPV_RAZON_SOCIAL, NPV_NOMBRE_CLIENTE, NPV_FECHA, NPV_RUTA, NPV_TIPO_VENTA, NPV_SUBTOTAL, NPV_IVA, NPV_IEPS, NPV_RECONOCIMIENTO, NPV_TOTAL, NPV_CORPO_CLIENTE, NPV_ESTATUS_NOTA, NPV_KILOLITROS_VENDIDOS, NPV_UPLOAD) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+         this.InsertaVta = `INSERT INTO tb_hh_nota_PreVenta (NPV_NOTA, NPV_CLIENTE, NPV_RAZON_SOCIAL, NPV_NOMBRE_CLIENTE, NPV_FECHA, NPV_RUTA, NPV_TIPO_VENTA, NPV_SUBTOTAL, NPV_IVA, NPV_IEPS, NPV_RECONOCIMIENTO, NPV_TOTAL, NPV_CORPO_CLIENTE, NPV_ESTATUS_NOTA, NPV_KILOLITROS_VENDIDOS, NPV_UPLOAD, NPV_HORA) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
 
-         db.executeSql(this.InsertaVta, [this.ultimoFolio, this.cliente.CL_CLIENTE, this.cliente.CL_PUNTOVENTA,this.cliente.CL_NOMNEGOCIO,this.fechaHoraFinal,this.rutamail, this.tipoVentaCliente, this.subtotalVta, this.IVAVta, this.IEPSVta, this.reconocimientoVta, this.totalFinal, this.cliente.CL_CORPORACION, 'ACTIVA', this.KLAcumVta, 0])
+         db.executeSql(this.InsertaVta, [this.ultimoFolio, this.cliente.CL_CLIENTE, this.cliente.CL_PUNTOVENTA,this.cliente.CL_NOMNEGOCIO,this.fechaHoraFinal,this.rutamail, this.tipoVentaCliente, this.subtotalVta, this.IVAVta, this.IEPSVta, this.reconocimientoVta, this.totalFinal, this.cliente.CL_CORPORACION, 'ACTIVA', this.KLAcumVta, 0,this.horaFinal])
          .catch(e => console.log(e));    
        }).then(res =>{
         

@@ -40,6 +40,7 @@
 <ion-row>
   <ion-col>
 <b>=====================================</b>
+<p *ngIf="cve.promo"><b>Promocion: {{cve.promo}}</b></p>
 <p><b> {{cve.clave}}  {{cve.nombre}}</b></p> 
 <p> Cant: {{cve.cantidad}}   Precio:${{cve.precio| number:'1.2-2'}}</p>
 <p> IVA:${{cve.iva| number:'1.2-2'}}   IEPS:${{cve.ieps| number:'1.2-2'}}</p>

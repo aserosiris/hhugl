@@ -54,6 +54,7 @@ promoSQL: any;
        private toastCtrl: ToastController,
        private Storage: Storage,
        private sqlite: SQLite) {
+        
 
    // this.producto.getProductos().subscribe(res =>{
      // this.productos = res.result;}) 
@@ -168,7 +169,11 @@ promoSQL: any;
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ModalPage');
-    this.obtenerRuta();
+    //this.obtenerRuta();
+    this.Storage.get('useremail').then((val) =>{
+      this.rutamail = parseInt(val);
+      this.inruta = this.rutamail;
+    })
     //this.getTipoPrecio()
     this.cliente = this.navParams.get('cliente');
     this.tipoPrecioRuta = this.navParams.get('tipoRuta')
@@ -229,16 +234,10 @@ promoSQL: any;
     toast.present();
   }
 
-  ionViewWillEnter(){
-    
-  }
 
 
   obtenerRuta(){
-    this.Storage.get('useremail').then((val) =>{
-      this.rutamail = parseInt(val);
-      this.inruta = this.rutamail;
-    })
+   
   }
 
  getPromos(clave){
@@ -277,7 +276,9 @@ promoSQL: any;
       name: 'ionicdb.db',
       location: 'default'
     }).then((db: SQLiteObject) => {
-      
+      console.log(this.rutamail,"ruta")
+      console.log(this.cliente.CL_CLIENTE,"cliente")
+      console.log(this.tipoPrecioRuta,"tTP")
       this.consulta = `select * from(
         SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, PD_IMAGEN, CASE WHEN PRC_PRECIO_ESPECIAL IS NOT NULL THEN PRC_PRECIO_ESPECIAL ELSE PR_PRECIO END AS PRECIO_FINAL, CASE WHEN  PRC_IVA IS NOT NULL THEN PRC_IVA ELSE PR_IVA END IVA_FINAL, CASE WHEN PRC_IEPS IS NOT NULL THEN PRC_IEPS ELSE PR_IEPS END AS IEPS_FINAL, PR_SUCURSAL, PR_EMPRESA,UM_CANTIDAD, IN_CANTIDAD AS EXISTENCIA/**/
                   FROM (SELECT Cve.PD_CLAVE, Cve.PD_NOMBRE, Cve.PD_UM, Cve.PD_GRUPO, Cve.PD_IMAGEN, Cve.PRC_PRECIO_ESPECIAL, Cve.PRC_IVA, Cve.PRC_IEPS, Cve.PR_PRECIO, Cve.PR_IVA, Cve.PR_IEPS, Cve.PR_SUCURSAL, Cve.PR_EMPRESA, Cve.UM_CANTIDAD, Inv.IN_CANTIDAD

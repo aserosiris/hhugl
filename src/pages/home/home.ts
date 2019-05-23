@@ -682,7 +682,7 @@ updateNV(){
           console.log(this.detalleVenta,'detalle vta')
         SqlServer.execute("INSERT INTO TB_HH_NOTA_DETALLE (DN_FECHA,DN_NOTA ,DN_CLAVE,DN_DESCRIPCION,DN_CANTIDAD_PIEZAS,DN_PRECIO,DN_IVA,DN_IEPS,DN_IMPORTE,DN_UPLOAD) VALUES('"+this.detalleVenta[f]["DN_FECHA"]+"','"+this.detalleVenta[f]["DN_NOTA"]+"',"+this.detalleVenta[f]["DN_CLAVE"]+",'"+this.detalleVenta[f]["DN_DESCRIPCION"]+"',"+this.detalleVenta[f]["DN_CANTIDAD_PIEZAS"]+","+this.detalleVenta[f]["DN_PRECIO"]+","+this.detalleVenta[f]["DN_IVA"]+","+this.detalleVenta[f]["DN_IEPS"]+","+this.detalleVenta[f]["DN_IMPORTE"]+","+this.detalleVenta[f]["DN_UPLOAD"]+")", function(event) {    
    
-          //alert("Update complete detalle : " + JSON.stringify(event));
+          alert("Detalle de venta guardado correctamente : " + JSON.stringify(event));
          
         }, function(error) {
           alert("Error : " + JSON.stringify(error));
@@ -739,7 +739,8 @@ return db.executeSql(sqlquery,[])
         NPV_CORPO_CLIENTE: res.rows.item(i).NPV_CORPO_CLIENTE,
         NPV_ESTATUS_NOTA: res.rows.item(i).NPV_ESTATUS_NOTA,
         NPV_KILOLITROS_VENDIDOS: res.rows.item(i).NPV_KILOLITROS_VENDIDOS,
-        NPV_UPLOAD: res.rows.item(i).NPV_UPLOAD
+        NPV_UPLOAD: res.rows.item(i).NPV_UPLOAD,
+        NPV_HORA: res.rows.item(i).NPV_HORA
       })
       
       
@@ -763,7 +764,7 @@ return db.executeSql(sqlquery,[])
   console.log(this.notaPreventa1,'el then al final')
   for(var e=0; e<this.notaPreventa1.length; e++){
     console.log('dentro del for insert')
-SqlServer.execute("INSERT INTO TB_HH_NOTA_PREVENTA (NPV_NOTA, NPV_CLIENTE ,NPV_RAZON_SOCIAL ,NPV_NOMBRE_CLIENTE ,NPV_FECHA,NPV_RUTA,NPV_TIPO_VENTA,NPV_SUBTOTAL,NPV_IVA,NPV_IEPS,NPV_RECONOCIMIENTO,NPV_TOTAL ,NPV_CORPO_CLIENTE,NPV_ESTATUS_NOTA,NPV_KILOLITROS_VENDIDOS ,NPV_UPLOAD)  VALUES('"+this.notaPreventa1[e]["NV_NOTA"]+"',"+this.notaPreventa1[e]["NV_CLIENTE"]+",'"+this.notaPreventa1[e]["NV_RAZON_SOCIAL"]+"','"+this.notaPreventa1[e]["NV_NOMBRE_CLIENTE"]+"','"+this.notaPreventa1[e]["NV_FECHA"]+"',"+this.notaPreventa1[e]["NV_RUTA"]+",'"+this.notaPreventa1[e]["NV_TIPO_VENTA"]+"',"+this.notaPreventa1[e]["NV_SUBTOTAL"]+","+this.notaPreventa1[e]["NV_IVA"]+","+this.notaPreventa1[e]["NV_IEPS"]+","+this.notaPreventa1[e]["NV_RECONOCIMIENTO"]+","+this.notaPreventa1[e]["NV_TOTAL"]+","+this.notaPreventa1[e]["NV_CORPO_CLIENTE"]+",'"+this.notaPreventa1[e]["NV_ESTATUS_NOTA"]+"',"+this.notaPreventa1[e]["NV_KILOLITROS_VENDIDOS"]+","+this.notaPreventa1[e]["NV_UPLOAD"]+")", function(event) {    
+SqlServer.execute("INSERT INTO TB_HH_NOTA_PREVENTA (NPV_NOTA, NPV_CLIENTE ,NPV_RAZON_SOCIAL ,NPV_NOMBRE_CLIENTE ,NPV_FECHA,NPV_RUTA,NPV_TIPO_VENTA,NPV_SUBTOTAL,NPV_IVA,NPV_IEPS,NPV_RECONOCIMIENTO,NPV_TOTAL ,NPV_CORPO_CLIENTE,NPV_ESTATUS_NOTA,NPV_KILOLITROS_VENDIDOS ,NPV_UPLOAD, NPV_HORA)  VALUES('"+this.notaPreventa1[e]["NPV_NOTA"]+"',"+this.notaPreventa1[e]["NPV_CLIENTE"]+",'"+this.notaPreventa1[e]["NPV_RAZON_SOCIAL"]+"','"+this.notaPreventa1[e]["NPV_NOMBRE_CLIENTE"]+"','"+this.notaPreventa1[e]["NPV_FECHA"]+"',"+this.notaPreventa1[e]["NPV_RUTA"]+",'"+this.notaPreventa1[e]["NPV_TIPO_VENTA"]+"',"+this.notaPreventa1[e]["NPV_SUBTOTAL"]+","+this.notaPreventa1[e]["NPV_IVA"]+","+this.notaPreventa1[e]["NPV_IEPS"]+","+this.notaPreventa1[e]["NPV_RECONOCIMIENTO"]+","+this.notaPreventa1[e]["NPV_TOTAL"]+","+this.notaPreventa1[e]["NPV_CORPO_CLIENTE"]+",'"+this.notaPreventa1[e]["NPV_ESTATUS_NOTA"]+"',"+this.notaPreventa1[e]["NPV_KILOLITROS_VENDIDOS"]+","+this.notaPreventa1[e]["NPV_UPLOAD"]+",'"+this.notaPreventa1[e]["NPV_HORA"]+"')", function(event) {    
  
     alert("Update complete : " + JSON.stringify(event));
    
@@ -856,6 +857,10 @@ for(var e=0;e<this.detallePreventa.length; e++){
 
 })
 
+}
+
+inventario(){
+  this.navCtrl.push("InventarioPage");
 }
 
 /***************************************************************** */

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
 
-      <ion-title>.* Nota de PreVenta *</ion-title>
+      <ion-title>.* Nota de venta *</ion-title>
       <ion-buttons end>
         <button ion-button icon-only color="royal" large (click)="goTicket()"> 
           <ion-icon md="md-cart"></ion-icon>
@@ -65,9 +65,13 @@
 
 
   <!--Codigo de Boton para agregar-->
+ 
     <ion-buttons>    <!-- abre la ventana temporal para ver los productos-->
         <button full ion-button icon-only (click)="openModal()"><ion-icon name="add"></ion-icon> Catalogo de Productos </button>
     </ion-buttons>
+    <ion-buttons>    <!-- abre la ventana temporal para ver los productos-->
+      <button full ion-button icon-only (click)="openModalPromos()"><ion-icon name="add"></ion-icon> Promociones </button>
+  </ion-buttons>
 
 <ion-card>
   <ion-card-content>
@@ -78,7 +82,7 @@
       <ion-row>
         <ion-col col-2>
           <ion-avatar item-start>
-            <img src="http://placehold.it/10x10">
+            <img src="assets/imgs/logo.png">
           </ion-avatar>
         </ion-col>
         <ion-col col-10 class="rowCol">
@@ -86,6 +90,9 @@
             <ion-row >
               <ion-col col-12>
                 <span>
+                  <div *ngIf="producto.promo">
+                      <b>Promocion:{{producto.promo}}</b>
+                  </div>
                   <b>{{producto.clave}} {{producto.nombre}}</b>
                 </span>
               </ion-col>

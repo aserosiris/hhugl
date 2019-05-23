@@ -92,7 +92,11 @@ promoSQL: any;
         handler: data=>{
      
           if(Number(data.cantidad)){
-           
+           if(data.cantidad < 0){
+            this.inventarioIn();
+            this.closeModal();
+           }else{
+
               this.objeto = {    //si usamos [{ ...}], [{ ... }]  crea un arreglo de arreglos
               clave: producto.PD_CLAVE,
               nombre: producto.PD_NOMBRE,
@@ -103,6 +107,9 @@ promoSQL: any;
               importe: (data.cantidad*producto.PRECIO_FINAL) + (producto.IEPS_FINAL*producto.PRECIO_FINAL*data.cantidad) + producto.IVA_FINAL*producto.PRECIO_FINAL*data.cantidad,
               equivalencia:producto.UM_CANTIDAD * data.cantidad
             }
+          
+          }
+           
 
 	  // }
 
@@ -138,6 +145,22 @@ promoSQL: any;
     if (val && val.trim() != '') {
       this.items = this.items.filter((item) => {
         return (item.PD_NOMBRE.toUpperCase().indexOf(val.toUpperCase()) > -1);
+      })
+    }
+  }
+
+  getItemsXclave(ev: any){
+    // Reset items back to all of the items
+
+    this.initializeItems();
+
+    // set val to the value of the searchbar
+    let val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.items = this.items.filter((item) => {
+        return (item.PD_CLAVE.toString().toUpperCase().indexOf(val.toUpperCase()) > -1);
       })
     }
   }
@@ -205,9 +228,7 @@ promoSQL: any;
     toast.present();
   }
 
-  ionViewWillEnter(){
-    
-  }
+
 
 
   obtenerRuta(){
@@ -248,51 +269,53 @@ promoSQL: any;
 
 
 
-  getData() {
-    this.sqlite.create({
-      name: 'ionicdb.db',
-      location: 'default'
-    }).then((db: SQLiteObject) => {
-      
-      this.consulta = `select * from(
-        SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, CASE WHEN PRC_PRECIO_ESPECIAL IS NOT NULL THEN PRC_PRECIO_ESPECIAL ELSE PR_PRECIO END AS PRECIO_FINAL, CASE WHEN  PRC_IVA IS NOT NULL THEN PRC_IVA ELSE PR_IVA END IVA_FINAL, CASE WHEN PRC_IEPS IS NOT NULL THEN PRC_IEPS ELSE PR_IEPS END AS IEPS_FINAL, PR_SUCURSAL, PR_EMPRESA,UM_CANTIDAD, IN_CANTIDAD AS EXISTENCIA/**/
-                  FROM (SELECT Cve.PD_CLAVE, Cve.PD_NOMBRE, Cve.PD_UM, Cve.PD_GRUPO, Cve.PRC_PRECIO_ESPECIAL, Cve.PRC_IVA, Cve.PRC_IEPS, Cve.PR_PRECIO, Cve.PR_IVA, Cve.PR_IEPS, Cve.PR_SUCURSAL, Cve.PR_EMPRESA, Cve.UM_CANTIDAD, Inv.IN_CANTIDAD
-              
-          FROM( SELECT A.PD_CLAVE, A.PD_NOMBRE, A.PD_UM, A.PD_GRUPO,A.PRC_PRECIO_ESPECIAL, A.PRC_IVA, A.PRC_IEPS, B.PR_PRECIO, B.PR_IVA, B.PR_IEPS, B.PR_SUCURSAL, B.PR_EMPRESA, A.UM_CANTIDAD /**/
-                               FROM (SELECT Y.PD_CLAVE, Y.PD_NOMBRE, Y.PD_UM, Y.PD_GRUPO, X.PRC_CLAVE, X.PRC_PRECIO_ESPECIAL, X.PRC_IVA, X.PRC_IEPS, Y.UM_CANTIDAD /**/
-                                    FROM (SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, UM_CANTIDAD/**/ FROM tb_hh_productos  WHERE (PD_BAJA <> 'B')) AS Y
-                                                    LEFT JOIN
-                                           (SELECT  PRC_CLAVE, PRC_PRECIO_ESPECIAL, PRC_IVA, PRC_IEPS FROM tb_hh_precio_cliente WHERE  (PRC_RUTA_CLIE = ?) AND (PRC_CLIENTE = ?)) AS X 
-                                                           ON Y.PD_CLAVE = X.PRC_CLAVE) AS A
-                                                     LEFT JOIN
-                                           (SELECT PR_CLAVE, PR_PRECIO, PR_IVA, PR_IEPS, PR_SUCURSAL, PR_EMPRESA FROM  tb_hh_precios WHERE (PR_TIPO_PRECIO = ?)) AS B
-                                                           ON A.PD_CLAVE = B.PR_CLAVE) AS Cve
-                               INNER JOIN
-                          (SELECT IN_CLAVE, IN_CANTIDAD FROM tb_hh_inventario) AS Inv   
-                                          ON Cve.PD_CLAVE=Inv.IN_CLAVE ) AS P) F where PRECIO_FINAL is not null AND EXISTENCIA is not null ORDER BY PD_CLAVE DESC`
+getData() {
+  this.sqlite.create({
+    name: 'ionicdb.db',
+    location: 'default'
+  }).then((db: SQLiteObject) => {
+    
+    this.consulta = `select * from(
+      SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, PD_IMAGEN, CASE WHEN PRC_PRECIO_ESPECIAL IS NOT NULL THEN PRC_PRECIO_ESPECIAL ELSE PR_PRECIO END AS PRECIO_FINAL, CASE WHEN  PRC_IVA IS NOT NULL THEN PRC_IVA ELSE PR_IVA END IVA_FINAL, CASE WHEN PRC_IEPS IS NOT NULL THEN PRC_IEPS ELSE PR_IEPS END AS IEPS_FINAL, PR_SUCURSAL, PR_EMPRESA,UM_CANTIDAD, IN_CANTIDAD AS EXISTENCIA/**/
+                FROM (SELECT Cve.PD_CLAVE, Cve.PD_NOMBRE, Cve.PD_UM, Cve.PD_GRUPO, Cve.PD_IMAGEN, Cve.PRC_PRECIO_ESPECIAL, Cve.PRC_IVA, Cve.PRC_IEPS, Cve.PR_PRECIO, Cve.PR_IVA, Cve.PR_IEPS, Cve.PR_SUCURSAL, Cve.PR_EMPRESA, Cve.UM_CANTIDAD, Inv.IN_CANTIDAD
+            
+        FROM( SELECT A.PD_CLAVE, A.PD_NOMBRE, A.PD_UM, A.PD_GRUPO, A.PD_IMAGEN, A.PRC_PRECIO_ESPECIAL, A.PRC_IVA, A.PRC_IEPS, B.PR_PRECIO, B.PR_IVA, B.PR_IEPS, B.PR_SUCURSAL, B.PR_EMPRESA, A.UM_CANTIDAD /**/
+                             FROM (SELECT Y.PD_CLAVE, Y.PD_NOMBRE, Y.PD_UM, Y.PD_GRUPO, Y.PD_IMAGEN, X.PRC_CLAVE, X.PRC_PRECIO_ESPECIAL, X.PRC_IVA, X.PRC_IEPS, Y.UM_CANTIDAD /**/
+                                  FROM (SELECT PD_CLAVE, PD_NOMBRE, PD_UM, PD_GRUPO, UM_CANTIDAD, PD_IMAGEN/**/ FROM tb_hh_productos  WHERE (PD_BAJA <> 'B')) AS Y
+                                                  LEFT JOIN
+                                         (SELECT  PRC_CLAVE, PRC_PRECIO_ESPECIAL, PRC_IVA, PRC_IEPS FROM tb_hh_precio_cliente WHERE  (PRC_RUTA_CLIE = ?) AND (PRC_CLIENTE = ?)) AS X 
+                                                         ON Y.PD_CLAVE = X.PRC_CLAVE) AS A
+                                                   LEFT JOIN
+                                         (SELECT PR_CLAVE, PR_PRECIO, PR_IVA, PR_IEPS, PR_SUCURSAL, PR_EMPRESA FROM  tb_hh_precios WHERE (PR_TIPO_PRECIO = ?)) AS B
+                                                         ON A.PD_CLAVE = B.PR_CLAVE) AS Cve
+                             INNER JOIN
+                        (SELECT IN_CLAVE, IN_CANTIDAD FROM tb_hh_inventario) AS Inv   
+                                        ON Cve.PD_CLAVE=Inv.IN_CLAVE ) AS P) F where PRECIO_FINAL is not null AND EXISTENCIA is not null ORDER BY PD_CLAVE DESC`
 
 
-      //db.executeSql(this.consulta, [this.rutamail, this.cliente.CL_CLIENTE, this.tipoPrecioRuta])
-      db.executeSql(this.consulta, [this.rutamail, this.cliente.CL_CLIENTE, this.tipoPrecioRuta])
-      .then(res => {
-        this.productosSQL = [];
-        for(var i=0; i<res.rows.length; i++) {
-          this.productosSQL.push({PD_CLAVE:res.rows.item(i).PD_CLAVE,PD_NOMBRE:res.rows.item(i).PD_NOMBRE, 
-            PD_UM:res.rows.item(i).PD_UM,
-            PD_GRUPO:res.rows.item(i).PD_GRUPO, 
-            PRECIO_FINAL:res.rows.item(i).PRECIO_FINAL, 
-            IVA_FINAL:res.rows.item(i).IVA_FINAL,
-            IEPS_FINAL:res.rows.item(i).IEPS_FINAL,
-            PR_SUCURSAL:res.rows.item(i).PR_SUCURSAL,
-            PR_EMPRESA:res.rows.item(i).PR_EMPRESA,
-            UM_CANTIDAD:res.rows.item(i).UM_CANTIDAD,
-            EXISTENCIA:res.rows.item(i).EXISTENCIA
-          })
-        }
-      })
-      .catch(e => console.log(e));
-  });
- 
+    //db.executeSql(this.consulta, [this.rutamail, this.cliente.CL_CLIENTE, this.tipoPrecioRuta])
+    db.executeSql(this.consulta, [this.rutamail, this.cliente.CL_CLIENTE, this.tipoPrecioRuta])
+    .then(res => {
+      this.productosSQL = [];
+      for(var i=0; i<res.rows.length; i++) {
+        this.productosSQL.push({PD_CLAVE:res.rows.item(i).PD_CLAVE,PD_NOMBRE:res.rows.item(i).PD_NOMBRE, 
+          PD_UM:res.rows.item(i).PD_UM,
+          PD_IMAGEN:res.rows.item(i).PD_IMAGEN,
+          PD_GRUPO:res.rows.item(i).PD_GRUPO, 
+          PRECIO_FINAL:res.rows.item(i).PRECIO_FINAL, 
+          IVA_FINAL:res.rows.item(i).IVA_FINAL,
+          IEPS_FINAL:res.rows.item(i).IEPS_FINAL,
+          PR_SUCURSAL:res.rows.item(i).PR_SUCURSAL,
+          PR_EMPRESA:res.rows.item(i).PR_EMPRESA,
+          UM_CANTIDAD:res.rows.item(i).UM_CANTIDAD,
+          EXISTENCIA:res.rows.item(i).EXISTENCIA
+        })
+      }
+      console.log(this.productosSQL, "productos")
+    })
+    .catch(e => console.log(e));
+});
+
 }
 
 
