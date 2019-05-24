@@ -153,7 +153,8 @@ promo3 = 0;
                   iva:producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
                   ieps:producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad,
                   importe: (data.cantidad * producto[i].PM_CANTIDAD * producto[i].PM_PRECIOXUNIDAD_PROMO) + (producto[i].IEPS_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD) + producto[i].IVA_FINAL*producto[i].PM_PRECIOXUNIDAD_PROMO * data.cantidad * producto[i].PM_CANTIDAD,
-                  equivalencia:producto[i].UM_CANTIDAD * data.cantidad * producto[i].PM_CANTIDAD
+                  equivalencia:producto[i].UM_CANTIDAD * data.cantidad * producto[i].PM_CANTIDAD,
+                  paquete:data.cantidad
                 })
               
                 console.log(this.objeto, "objeto")

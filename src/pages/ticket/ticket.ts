@@ -36,6 +36,7 @@ export class TicketPage {
   IEPSVta:Number;
   totalFinal:Number;
   KLAcumVta:Number;
+  promoAqui:0;
  
   rutamail:number;
 
@@ -601,8 +602,23 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
          db.executeSql(this.InsertaVta, [this.ultimoFolio, this.cliente.CL_CLIENTE, this.cliente.CL_PUNTOVENTA,this.cliente.CL_NOMNEGOCIO,this.fechaHoraFinal,this.rutamail, this.tipoVentaCliente, this.subtotalVta, this.IVAVta, this.IEPSVta, this.reconocimientoVta, this.totalFinal, this.cliente.CL_CORPORACION, 'ACTIVA', this.KLAcumVta, 0,this.horaFinal])
          .catch(e => console.log(e));    
        }).then(res =>{
+         
+        
         
         for (var p=0; p<this.clavesVta.length; p++){
+          if(this.clavesVta[p]['promo']){
+
+            if(this.promoAqui !=this.clavesVta[p]['promo']){
+              var promopac = 'PROMOCION PAQUETES'
+              var preciopROMO = 0
+              var promorenglon = `INSERT INTO tb_hh_nota_detalle (DN_FECHA, DN_NOTA, DN_CLAVE, DN_DESCRIPCION, DN_CANTIDAD_PIEZAS, DN_PRECIO, DN_IVA, DN_IEPS, DN_IMPORTE, DN_UPLOAD) VALUES (?,?,?,?,?,?,?,?,?,?)`
+  
+              this.db.executeSql(promorenglon,[this.fechaHoraFinal, this.ultimoFolio,this.clavesVta[p]['promo'], promopac , this.clavesVta[p]['paquete'], preciopROMO, this.clavesVta[p]['iva'], this.clavesVta[p]['ieps'], this.clavesVta[p]['importe'],0])
+              .catch(e => console.log(e));
+              this.promoAqui = this.clavesVta[p]['promo']
+            }
+           
+          }
           console.log(this.clavesVta.length)
    
         this.InsertaDetaVta = `INSERT INTO tb_hh_nota_detalle (DN_FECHA, DN_NOTA, DN_CLAVE, DN_DESCRIPCION, DN_CANTIDAD_PIEZAS, DN_PRECIO, DN_IVA, DN_IEPS, DN_IMPORTE, DN_UPLOAD) VALUES (?,?,?,?,?,?,?,?,?,?)`
