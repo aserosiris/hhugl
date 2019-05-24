@@ -23,7 +23,7 @@ export class CarritoVtPage {
   NotaVta: Array<any> = []; 
   preventa: any;
   deletePromo
- 
+ //cambio
 
   tipRuta
  
