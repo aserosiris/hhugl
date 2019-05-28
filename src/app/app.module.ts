@@ -9,6 +9,7 @@ import { Toast } from '@ionic-native/toast';
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id/ngx';
 
 
 
@@ -101,7 +102,8 @@ import { TraspasoProvider } from '../providers/traspaso/traspaso';
     NotapreProvider,
     TraspasoProvider,
     Geolocation,
-    BackgroundGeolocation
+    BackgroundGeolocation,
+    UniqueDeviceID
 
 
   ]

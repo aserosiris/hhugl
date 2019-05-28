@@ -993,6 +993,8 @@ subirAsstencia(){
     this.navCtrl.setRoot("TraspasosPage");
    }
 
+   
+
 
 
    

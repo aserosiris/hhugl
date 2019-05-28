@@ -10,6 +10,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import 'rxjs/add/operator/catch';
 import { OnlineProvider } from './../../providers/online/online';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id/ngx';
 
 
 //import { SqlUpProvider } from '../../providers/sql-up/sql-up'
@@ -81,7 +82,8 @@ export class HomePage {
     private sqlite: SQLite,
     public online:OnlineProvider,
   // private SqlUpProvider: SqlUpProvider,
-    private notaVenta: NotaVentaProvider)  {
+    private notaVenta: NotaVentaProvider,
+    private uniqueDeviceID: UniqueDeviceID)  {
       SqlServer.init("201.174.70.186", "SQLSERVER", "sa", "TuLucernita2017", "SistemaComercial", function(event) {
        // alert(JSON.stringify(event));
         
@@ -105,6 +107,8 @@ export class HomePage {
   { 
     this.buscarImpresora(); //Buscar impresora conectada por Bluetooth desde que se abre la pagina para que este lista al imprimir
 
+    
+
   }
   ionViewDidEnter(){
     console.log(this.tipoticket,'esta es preventa')
@@ -115,7 +119,11 @@ export class HomePage {
       alert("Error : " + JSON.stringify(error));
     });				
     */
-   
+   this.uniqueDeviceID.get()
+  .then((uuid: any) => console.log(uuid, "uuid"))
+  .catch((error: any) => console.log(error, "uuid error"));
+
+  
 
     
     this.online.getStatus().subscribe(res =>{

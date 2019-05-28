@@ -613,7 +613,7 @@ this.fechaHoraFinal= this.fechaActual.toLocaleDateString('en-GB')+" "+this.horaF
               var preciopROMO = 0
               var promorenglon = `INSERT INTO tb_hh_nota_detalle (DN_FECHA, DN_NOTA, DN_CLAVE, DN_DESCRIPCION, DN_CANTIDAD_PIEZAS, DN_PRECIO, DN_IVA, DN_IEPS, DN_IMPORTE, DN_UPLOAD) VALUES (?,?,?,?,?,?,?,?,?,?)`
   
-              this.db.executeSql(promorenglon,[this.fechaHoraFinal, this.ultimoFolio,this.clavesVta[p]['promo'], promopac , this.clavesVta[p]['paquete'], preciopROMO, this.clavesVta[p]['iva'], this.clavesVta[p]['ieps'], this.clavesVta[p]['importe'],0])
+              this.db.executeSql(promorenglon,[this.fechaHoraFinal, this.ultimoFolio,this.clavesVta[p]['promo'], promopac , this.clavesVta[p]['paquete'], preciopROMO, 0, 0, 0,0])
               .catch(e => console.log(e));
               this.promoAqui = this.clavesVta[p]['promo']
             }
