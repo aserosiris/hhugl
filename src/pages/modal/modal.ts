@@ -296,7 +296,7 @@ promoSQL: any;
                           (SELECT IN_CLAVE, IN_CANTIDAD FROM tb_hh_inventario) AS Inv   
                                           ON Cve.PD_CLAVE=Inv.IN_CLAVE ) AS P) F where PRECIO_FINAL is not null AND EXISTENCIA is not null ORDER BY PD_CLAVE DESC`
 
-
+//comentario de prueba Rucobo
       //db.executeSql(this.consulta, [this.rutamail, this.cliente.CL_CLIENTE, this.tipoPrecioRuta])
       db.executeSql(this.consulta, [this.rutamail, this.cliente.CL_CLIENTE, this.tipoPrecioRuta])
       .then(res => {
